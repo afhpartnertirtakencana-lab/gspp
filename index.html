@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistem Administrasi Lingkungan St. Theofilus</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root{
+    --primary:#6b1f2a;
+    --primary-light:#8b2f3a;
+    --primary-dark:#4a1520;
+    --gold:#b8943f;
+    --gold-light:#d4af37;
+    --cream:#faf7f0;
+    --ivory:#fffef9;
+    --sage:#5a7a5a;
+    --charcoal:#1a1a1a;
+    --muted:#6b6b6b;
+    --border:#e8e0d4;
+  }
+  *{box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--charcoal);margin:0}
+  .font-serif{font-family:'Cormorant Garamond',serif}
+  .scrollbar-thin::-webkit-scrollbar{width:6px;height:6px}
+  .scrollbar-thin::-webkit-scrollbar-track{background:transparent}
+  .scrollbar-thin::-webkit-scrollbar-thumb{background:rgba(107,31,42,0.3);border-radius:3px}
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover{background:rgba(107,31,42,0.5)}
+  
+  .sidebar-link{transition:all .2s ease;position:relative}
+  .sidebar-link:hover{background:rgba(184,148,63,0.1)}
+  .sidebar-link.active{background:linear-gradient(90deg,rgba(107,31,42,0.12),transparent);color:var(--primary)}
+  .sidebar-link.active::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;background:var(--gold);border-radius:0 3px 3px 0}
+  
+  .card{background:var(--ivory);border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 3px rgba(107,31,42,0.04)}
+  .card-hover{transition:all .25s ease}
+  .card-hover:hover{box-shadow:0 8px 25px rgba(107,31,42,0.1);transform:translateY(-2px)}
+  
+  .btn-primary{background:var(--primary);color:white;transition:all .2s}
+  .btn-primary:hover{background:var(--primary-dark);box-shadow:0 4px 12px rgba(107,31,42,0.3)}
+  .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:white;transition:all .2s}
+  .btn-gold:hover{box-shadow:0 4px 12px rgba(184,148,63,0.4)}
+  .btn-outline{border:1.5px solid var(--border);background:white;color:var(--charcoal);transition:all .2s}
+  .btn-outline:hover{border-color:var(--primary);color:var(--primary)}
+  
+  table.data-table{width:100%;border-collapse:collapse}
+  table.data-table thead th{background:linear-gradient(180deg,var(--primary),var(--primary-light));color:white;padding:12px 14px;text-align:left;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+  table.data-table thead th:first-child{border-radius:8px 0 0 0}
+  table.data-table thead th:last-child{border-radius:0 8px 0 0}
+  table.data-table tbody td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:14px}
+  table.data-table tbody tr{transition:background .15s}
+  table.data-table tbody tr:hover{background:rgba(184,148,63,0.06)}
+  table.data-table tbody tr:nth-child(even){background:rgba(250,247,240,0.5)}
+  
+  .modal-overlay{background:rgba(26,26,26,0.5);backdrop-filter:blur(4px)}
+  .modal-content{animation:modalIn .25s ease}
+  @keyframes modalIn{from{opacity:0;transform:scale(0.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+  
+  .form-input{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;transition:all .15s;background:white;font-family:inherit}
+  .form-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(107,31,42,0.1)}
+  .form-label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+  
+  .toast{animation:toastIn .3s ease,toastOut .3s ease 2.7s forwards}
+  @keyframes toastIn{from{transform:translateX(400px);opacity:0}to{transform:translateX(0);opacity:1}}
+  @keyframes toastOut{to{transform:translateX(400px);opacity:0}}
+  
+  .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+  .badge-gold{background:rgba(184,148,63,0.15);color:#8a6f2f}
+  .badge-green{background:rgba(90,122,90,0.15);color:#3d5d3d}
+  .badge-red{background:rgba(107,31,42,0.12);color:var(--primary)}
+  .badge-blue{background:rgba(59,130,246,0.12);color:#1e40af}
+  
+  .kop-surat{border-bottom:3px double var(--primary);padding-bottom:12px;margin-bottom:8px}
+  
+  @media print{
+    .no-print{display:none !important}
+    .print-only{display:block !important}
+    body{background:white}
+    .print-container{box-shadow:none !important;border:none !important}
+    @page{margin:1.5cm}
+  }
+  .print-only{display:none}
+  
+  .fade-in{animation:fadeIn .3s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  
+  .category-header{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:12px 20px 6px}
+  
+  .stat-card{position:relative;overflow:hidden}
+  .stat-card::after{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;opacity:0.08}
+  .stat-card.burgundy::after{background:var(--primary)}
+  .stat-card.gold::after{background:var(--gold)}
+  .stat-card.sage::after{background:var(--sage)}
+  .stat-card.blue::after{background:#3b82f6}
+  
+  .letter-preview{font-family:'Times New Roman',serif;line-height:1.8;font-size:13px}
+  
+  .icon-wrap{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+</style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+<!-- SIDEBAR -->
+<aside class="no-print w-72 bg-white border-r flex flex-col" style="border-color:var(--border)">
+  <div class="px-5 py-5 border-b" style="border-color:var(--border);background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center p-1.5 flex-shrink-0">
+        <img src="https://z-cdn.media.chatglm.cn/files/9f93308d-152e-4da7-b704-e5fec50b47d5.png" alt="Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" class="w-full h-full object-contain">
+        <div class="hidden w-full h-full items-center justify-center" style="display:none">
+          <i class="fas fa-church text-2xl" style="color:var(--primary)"></i>
+        </div>
+      </div>
+      <div class="text-white min-w-0">
+        <h1 class="font-serif text-lg font-bold leading-tight">St. Theofilus</h1>
+        <p class="text-xs opacity-80 leading-tight">Taman Sari 8/9</p>
+      </div>
+    </div>
+    <p class="text-xs text-white/60 mt-3 leading-relaxed">Sistem Administrasi<br>Lingkungan Gereja Katolik</p>
+  </div>
+  
+  <nav class="flex-1 overflow-y-auto scrollbar-thin py-2" id="sidebarNav"></nav>
+  
+  <div class="px-4 py-3 border-t" style="border-color:var(--border);background:var(--cream)">
+    <div class="text-xs text-gray-500 mb-1">Google Sheets ID</div>
+    <div class="text-xs font-mono font-semibold break-all" style="color:var(--primary)">1bz-8jeYjaEFsVbT8Yf4bLjW3pR5ddW_VUdxG2viSi5k</div>
+    <button onclick="window.open('https://docs.google.com/spreadsheets/d/1bz-8jeYjaEFsVbT8Yf4bLjW3pR5ddW_VUdxG2viSi5k/edit','_blank')" class="mt-2 text-xs btn-outline px-3 py-1.5 rounded-md w-full">
+      <i class="fas fa-external-link-alt mr-1"></i>Buka Google Sheets
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="flex-1 flex flex-col overflow-hidden">
+  <!-- HEADER -->
+  <header class="no-print bg-white border-b px-6 py-3 flex items-center justify-between" style="border-color:var(--border)">
+    <div>
+      <h2 id="pageTitle" class="font-serif text-2xl font-bold" style="color:var(--primary)">Dashboard</h2>
+      <p id="pageSubtitle" class="text-xs text-gray-500">Lingkungan Taman Sari 8/9 St. Theofilus</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <button onclick="exportAllData()" class="btn-outline px-4 py-2 rounded-lg text-sm font-medium">
+        <i class="fas fa-download mr-1.5"></i>Backup Data
+      </button>
+      <label class="btn-outline px-4 py-2 rounded-lg text-sm font-medium cursor-pointer">
+        <i class="fas fa-upload mr-1.5"></i>Restore
+        <input type="file" accept=".json" onchange="importAllData(event)" class="hidden">
+      </label>
+    </div>
+  </header>
+  
+  <!-- CONTENT -->
+  <div class="flex-1 overflow-y-auto scrollbar-thin" id="mainContent">
+    <!-- Dynamic content here -->
+  </div>
+</main>
+
+<!-- MODAL -->
+<div id="modal" class="no-print fixed inset-0 z-50 hidden items-center justify-center modal-overlay p-4">
+  <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+    <div class="px-6 py-4 border-b flex items-center justify-between" style="border-color:var(--border);background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
+      <h3 id="modalTitle" class="font-serif text-xl font-bold text-white">Tambah Data</h3>
+      <button onclick="closeModal()" class="text-white/70 hover:text-white text-xl">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <form id="modalForm" onsubmit="saveData(event)" class="flex-1 overflow-y-auto scrollbar-thin p-6">
+      <div id="modalFields" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </form>
+    <div class="px-6 py-4 border-t flex justify-end gap-3" style="border-color:var(--border);background:var(--cream)">
+      <button onclick="closeModal()" class="btn-outline px-5 py-2 rounded-lg text-sm font-medium">Batal</button>
+      <button onclick="document.getElementById('modalForm').requestSubmit()" class="btn-primary px-5 py-2 rounded-lg text-sm font-medium">
+        <i class="fas fa-save mr-1.5"></i>Simpan
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toastContainer" class="no-print fixed top-5 right-5 z-[60] space-y-2"></div>
+
+<!-- PRINT AREA -->
+<div id="printArea" class="hidden"></div>
+
+<script>
+// ============= CONFIGURATION =============
+const CONFIG = {
+  keuskupan: "KEUSKUPAN AGUNG JAKARTA",
+  paroki: "PAROKI SANTO PETRUS & PAULUS MANGGA BESAR",
+  lingkungan: "LINGKUNGAN TAMAN SARI 8/9 ST. THEOFILUS",
+  lingkunganShort: "Lingkungan Taman Sari 8/9 St. Theofilus",
+  alamat: "Jl. Mangga Besar Raya No. 110, Jakarta Barat 11150",
+  telp: "(021) 6602345",
+  email: "parokimanggabesar@gmail.com",
+  ketua: "Sesilia Sylvia Winarto",
+  pastor: "B. Christian Triyudo Prastowo, SJ",
+  logoUrl: "https://z-cdn.media.chatglm.cn/files/9f93308d-152e-4da7-b704-e5fec50b47d5.png",
+  sheetId: "1bz-8jeYjaEFsVbT8Yf4bLjW3pR5ddW_VUdxG2viSi5k"
+};
+
+// ============= SECTIONS DEFINITION =============
+const CATEGORIES = [
+  { id:'dashboard', icon:'fa-gauge-high', title:'Dashboard', items:[] },
+  { id:'profil', icon:'fa-church', title:'Profil & Organisasi', items:[
+    { id:'pengesahan', title:'Lembar Pengesahan', icon:'fa-stamp', fields:[
+      {name:'jabatan',label:'Jabatan',type:'text'},
+      {name:'nama',label:'Nama',type:'text'},
+      {name:'ttd',label:'Tanda Tangan',type:'text'}
+    ]},
+    { id:'profil_lingkungan', title:'Profil Lingkungan', icon:'fa-circle-info', fields:[
+      {name:'data',label:'Data',type:'text'},
+      {name:'keterangan',label:'Keterangan',type:'textarea'}
+    ]},
+    { id:'visi_misi', title:'Visi dan Misi', icon:'fa-bullseye', fields:[
+      {name:'item',label:'Item',type:'text'},
+      {name:'uraian',label:'Uraian',type:'textarea'}
+    ]},
+    { id:'struktur', title:'Struktur Pengurus', icon:'fa-sitemap', fields:[
+      {name:'jabatan',label:'Jabatan',type:'text'},
+      {name:'nama',label:'Nama',type:'text'},
+      {name:'kontak',label:'Kontak',type:'text'},
+      {name:'keterangan',label:'Keterangan',type:'text'}
+    ]}
+  ]},
+  { id:'data_umat', icon:'fa-users', title:'Data Umat', items:[
+    { id:'kk', title:'Data Kepala Keluarga', icon:'fa-house-user', fields:[
+      {name:'nama_kk',label:'Nama KK',type:'text'},
+      {name:'alamat',label:'Alamat',type:'text'},
+      {name:'hp',label:'HP',type:'text'},
+      {name:'jumlah_jiwa',label:'Jumlah Jiwa',type:'number'}
+    ]},
+    { id:'umat', title:'Data Umat', icon:'fa-users', fields:[
+      {name:'nama',label:'Nama',type:'text'},
+      {name:'ttl',label:'TTL',type:'text'},
+      {name:'status',label:'Status',type:'text'},
+      {name:'keterangan',label:'Keterangan',type:'text'}
+    ]},
+    { id:'lansia', title:'Data Lansia', icon:'fa-user-clock', fields:[
+      {name:'nama',label:'Nama',type:'text'},
+      {name:'usia',label:'Usia',type:'number'},
+      {name:'alamat',label:'Alamat',type:'text'},
+      {name:'catatan',label:'Catatan',type:'text'}
+    ]},
+    { id:'omk', title:'Data OMK', icon:'fa-user-group', fields:[
+      {name:'nama',label:'Nama',type:'text'},
+      {name:'usia',label:'Usia',type:'number'},
+      {name:'kontak',label:'Kontak',type:'text'},
+      {name:'catatan',label:'Catatan',type:'text'}
+    ]},
+    { id:'anak_remaja', title:'Data Anak & Remaja', icon:'fa-child', fields:[
+      {name:'nama',label:'Nama',type:'text'},
+      {name:'usia',label:'Usia',type:'number'},
+      {name:'sekolah',label:'Sekolah',type:'text'},
+      {name:'catatan',label:'Catatan',type:'text'}
+    ]},
+    { id:'baptis', title:'Data Baptis', icon:'fa-droplet', fields:[
+      {name:'nama',label:'Nama',type:'text'},
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'paroki',label:'Paroki',type:'text'},
+      {name:'no_sertifikat',label:'No Sertifikat',type:'text'}
+    ]},
+    { id:'komuni', title:'Data Komuni Pertama', icon:'fa-bread-slice', fields:[
+      {name:'nama',label:'Nama',type:'text'},
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'paroki',label:'Paroki',type:'text'},
+      {name:'catatan',label:'Catatan',type:'text'}
+    ]},
+    { id:'krisma', title:'Data Krisma', icon:'fa-fire', fields:[
+      {name:'nama',label:'Nama',type:'text'},
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'paroki',label:'Paroki',type:'text'},
+      {name:'catatan',label:'Catatan',type:'text'}
+    ]},
+    { id:'perkawinan', title:'Data Perkawinan', icon:'fa-rings-wedding', fields:[
+      {name:'suami',label:'Suami',type:'text'},
+      {name:'istri',label:'Istri',type:'text'},
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'paroki',label:'Paroki',type:'text'}
+    ]},
+    { id:'mutasi', title:'Mutasi Umat', icon:'fa-arrow-right-arrow-left', fields:[
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'nama',label:'Nama',type:'text'},
+      {name:'arah',label:'Masuk/Keluar',type:'select',options:['Masuk','Keluar']},
+      {name:'keterangan',label:'Keterangan',type:'text'}
+    ]},
+    { id:'sakit', title:'Data Orang Sakit', icon:'fa-hospital-user', fields:[
+      {name:'nama',label:'Nama',type:'text'},
+      {name:'alamat',label:'Alamat',type:'text'},
+      {name:'tanggal_kunjungan',label:'Tanggal Kunjungan',type:'date'},
+      {name:'catatan',label:'Catatan',type:'text'}
+    ]},
+    { id:'umat_baru', title:'Pendataan Umat Baru', icon:'fa-user-plus', fields:[
+      {name:'nama',label:'Nama',type:'text'},
+      {name:'alamat',label:'Alamat',type:'text'},
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'catatan',label:'Catatan',type:'text'}
+    ]},
+    { id:'umat_pindah', title:'Pendataan Umat Pindah', icon:'fa-user-minus', fields:[
+      {name:'nama',label:'Nama',type:'text'},
+      {name:'tujuan',label:'Tujuan',type:'text'},
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'catatan',label:'Catatan',type:'text'}
+    ]}
+  ]},
+  { id:'surat', icon:'fa-envelope', title:'Surat Menyurat', items:[
+    { id:'surat_masuk', title:'Agenda Surat Masuk', icon:'fa-inbox', fields:[
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'nomor',label:'Nomor',type:'text'},
+      {name:'pengirim',label:'Pengirim',type:'text'},
+      {name:'perihal',label:'Perihal',type:'text'}
+    ]},
+    { id:'surat_keluar', title:'Agenda Surat Keluar', icon:'fa-paper-plane', fields:[
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'nomor',label:'Nomor',type:'text'},
+      {name:'tujuan',label:'Tujuan',type:'text'},
+      {name:'perihal',label:'Perihal',type:'text'}
+    ]},
+    { id:'disposisi', title:'Buku Disposisi', icon:'fa-clipboard-list', fields:[
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'nomor',label:'Nomor',type:'text'},
+      {name:'tindak_lanjut',label:'Tindak Lanjut',type:'text'},
+      {name:'pic',label:'PIC',type:'text'}
+    ]},
+    { id:'tpl_undangan', title:'Template Surat Undangan', icon:'fa-mail-bulk', isLetter:true, letterType:'undangan' },
+    { id:'tpl_keterangan', title:'Template Surat Keterangan', icon:'fa-file-contract', isLetter:true, letterType:'keterangan' },
+    { id:'tpl_tugas', title:'Template Surat Tugas', icon:'fa-clipboard-check', isLetter:true, letterType:'tugas' }
+  ]},
+  { id:'keuangan', icon:'fa-coins', title:'Keuangan', items:[
+    { id:'kas_umum', title:'Kas Umum', icon:'fa-wallet', fields:[
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'uraian',label:'Uraian',type:'text'},
+      {name:'masuk',label:'Masuk',type:'number'},
+      {name:'keluar',label:'Keluar',type:'number'},
+      {name:'saldo',label:'Saldo',type:'number'}
+    ]},
+    { id:'kas_sosial', title:'Kas Sosial', icon:'fa-hand-holding-heart', fields:[
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'uraian',label:'Uraian',type:'text'},
+      {name:'masuk',label:'Masuk',type:'number'},
+      {name:'keluar',label:'Keluar',type:'number'},
+      {name:'saldo',label:'Saldo',type:'number'}
+    ]},
+    { id:'kolekte', title:'Rekap Kolekte', icon:'fa-money-bill-wave', fields:[
+      {name:'bulan',label:'Bulan',type:'text'},
+      {name:'jumlah',label:'Jumlah',type:'number'},
+      {name:'tanggal_setor',label:'Tanggal Setor',type:'date'},
+      {name:'catatan',label:'Catatan',type:'text'}
+    ]}
+  ]},
+  { id:'inventaris', icon:'fa-box-archive', title:'Inventaris', items:[
+    { id:'inventaris', title:'Inventaris', icon:'fa-boxes-stacked', fields:[
+      {name:'barang',label:'Barang',type:'text'},
+      {name:'jumlah',label:'Jumlah',type:'number'},
+      {name:'kondisi',label:'Kondisi',type:'select',options:['Baik','Rusak Ringan','Rusak Berat']},
+      {name:'lokasi',label:'Lokasi',type:'text'}
+    ]},
+    { id:'pinjam', title:'Peminjaman Inventaris', icon:'fa-hand-holding', fields:[
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'barang',label:'Barang',type:'text'},
+      {name:'peminjam',label:'Peminjam',type:'text'},
+      {name:'kembali',label:'Tanggal Kembali',type:'date'}
+    ]}
+  ]},
+  { id:'program', icon:'fa-clipboard', title:'Program & Laporan', items:[
+    { id:'program_kerja', title:'Program Kerja Tahunan', icon:'fa-list-check', fields:[
+      {name:'program',label:'Program',type:'text'},
+      {name:'target',label:'Target',type:'text'},
+      {name:'pic',label:'PIC',type:'text'},
+      {name:'waktu',label:'Waktu',type:'text'},
+      {name:'status',label:'Status',type:'select',options:['Belum Mulai','Berjalan','Selesai','Tertunda']}
+    ]},
+    { id:'evaluasi', title:'Evaluasi Program', icon:'fa-chart-line', fields:[
+      {name:'program',label:'Program',type:'text'},
+      {name:'hasil',label:'Hasil',type:'textarea'},
+      {name:'kendala',label:'Kendala',type:'textarea'},
+      {name:'tindak_lanjut',label:'Tindak Lanjut',type:'text'}
+    ]},
+    { id:'lap_bulanan', title:'Laporan Bulanan', icon:'fa-calendar-days', fields:[
+      {name:'kegiatan',label:'Kegiatan',type:'text'},
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'peserta',label:'Peserta',type:'text'},
+      {name:'hasil',label:'Hasil',type:'textarea'}
+    ]},
+    { id:'lap_tahunan', title:'Laporan Tahunan', icon:'fa-calendar', fields:[
+      {name:'program',label:'Program',type:'text'},
+      {name:'realisasi',label:'Realisasi',type:'text'},
+      {name:'evaluasi',label:'Evaluasi',type:'textarea'},
+      {name:'catatan',label:'Catatan',type:'text'}
+    ]}
+  ]},
+  { id:'jadwal', icon:'fa-calendar-week', title:'Jadwal & Kegiatan', items:[
+    { id:'doa', title:'Jadwal Doa Lingkungan', icon:'fa-hands-praying', fields:[
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'tempat',label:'Tempat',type:'text'},
+      {name:'petugas',label:'Petugas',type:'text'},
+      {name:'keterangan',label:'Keterangan',type:'text'}
+    ]},
+    { id:'rosario', title:'Jadwal Rosario', icon:'fa-pray', fields:[
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'tempat',label:'Tempat',type:'text'},
+      {name:'petugas',label:'Petugas',type:'text'},
+      {name:'keterangan',label:'Keterangan',type:'text'}
+    ]},
+    { id:'pendalaman', title:'Jadwal Pendalaman Iman', icon:'fa-book-open', fields:[
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'tema',label:'Tema',type:'text'},
+      {name:'pembawa',label:'Pembawa',type:'text'},
+      {name:'catatan',label:'Catatan',type:'text'}
+    ]},
+    { id:'liturgi', title:'Jadwal Liturgi', icon:'fa-candle-holder', fields:[
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'lektor',label:'Lektor',type:'text'},
+      {name:'mazmur',label:'Mazmur',type:'text'},
+      {name:'kolektan',label:'Kolektan',type:'text'}
+    ]},
+    { id:'koor', title:'Jadwal Koor', icon:'fa-music', fields:[
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'petugas',label:'Petugas',type:'text'},
+      {name:'lokasi',label:'Lokasi',type:'text'},
+      {name:'catatan',label:'Catatan',type:'text'}
+    ]},
+    { id:'kunjungan', title:'Kunjungan Kasih', icon:'fa-heart', fields:[
+      {name:'nama',label:'Nama',type:'text'},
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'petugas',label:'Petugas',type:'text'},
+      {name:'catatan',label:'Catatan',type:'text'}
+    ]}
+  ]},
+  { id:'rapat', icon:'fa-people-group', title:'Rapat & Arsip', items:[
+    { id:'hadir_rapat', title:'Daftar Hadir Rapat', icon:'fa-clipboard-user', fields:[
+      {name:'nama',label:'Nama',type:'text'},
+      {name:'alamat',label:'Alamat',type:'text'},
+      {name:'ttd',label:'Tanda Tangan',type:'text'}
+    ]},
+    { id:'berita_acara', title:'Berita Acara', icon:'fa-file-lines', fields:[
+      {name:'agenda',label:'Agenda',type:'text'},
+      {name:'pembahasan',label:'Pembahasan',type:'textarea'},
+      {name:'keputusan',label:'Keputusan',type:'textarea'}
+    ]},
+    { id:'notulen', title:'Notulen Rapat', icon:'fa-pen-to-square', fields:[
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'agenda',label:'Agenda',type:'text'},
+      {name:'hasil',label:'Hasil',type:'textarea'},
+      {name:'pic',label:'PIC',type:'text'}
+    ]},
+    { id:'dokumentasi', title:'Dokumentasi Kegiatan', icon:'fa-camera', fields:[
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'nama_kegiatan',label:'Nama Kegiatan',type:'text'},
+      {name:'lokasi',label:'Lokasi',type:'text'},
+      {name:'catatan',label:'Catatan',type:'text'}
+    ]},
+    { id:'arsip_keputusan', title:'Arsip Keputusan Lingkungan', icon:'fa-folder-open', fields:[
+      {name:'tanggal',label:'Tanggal',type:'date'},
+      {name:'nomor',label:'Nomor',type:'text'},
+      {name:'keputusan',label:'Keputusan',type:'textarea'},
+      {name:'catatan',label:'Catatan',type:'text'}
+    ]}
+  ]}
+];
+
+// Flatten sections for lookup
+const ALL_SECTIONS = {};
+CATEGORIES.forEach(cat => cat.items.forEach(item => { ALL_SECTIONS[item.id] = item; }));
+
+// ============= STATE =============
+let currentSection = 'dashboard';
+let editingId = null;
+let searchData = {};
+
+// ============= STORAGE =============
+const STORAGE_PREFIX = 'lingkungan_st_theofilus_';
+
+function loadData(sectionId) {
+  try {
+    const raw = localStorage.getItem(STORAGE_PREFIX + sectionId);
+    return raw ? JSON.parse(raw) : getDefaultData(sectionId);
+  } catch { return []; }
+}
+
+function saveDataToStorage(sectionId, data) {
+  localStorage.setItem(STORAGE_PREFIX + sectionId, JSON.stringify(data));
+}
+
+function getDefaultData(sectionId) {
+  // Pre-fill some sections with initial data
+  if (sectionId === 'profil_lingkungan') return [
+    {data:'Nama Lingkungan', keterangan:'Taman Sari 8/9 St. Theofilus'},
+    {data:'Pelindung', keterangan:'St. Theofilus'},
+    {data:'Paroki', keterangan:'Santo Petrus & Paulus Mangga Besar'},
+    {data:'Keuskupan', keterangan:'Agung Jakarta'},
+    {data:'Ketua Lingkungan', keterangan:'Sesilia Sylvia Winarto'},
+    {data:'Pastor Paroki', keterangan:'B. Christian Triyudo Prastowo, SJ'},
+    {data:'Wilayah', keterangan:'Taman Sari'},
+    {data:'Jumlah KK', keterangan:'-'}
+  ];
+  if (sectionId === 'struktur') return [
+    {jabatan:'Ketua Lingkungan', nama:'Sesilia Sylvia Winarto', kontak:'-', keterangan:'Periode 2024-2026'},
+    {jabatan:'Wakil Ketua', nama:'-', kontak:'-', keterangan:''},
+    {jabatan:'Sekretaris', nama:'-', kontak:'-', keterangan:''},
+    {jabatan:'Bendahara', nama:'-', kontak:'-', keterangan:''},
+    {jabatan:'Seksi Liturgi', nama:'-', kontak:'-', keterangan:''},
+    {jabatan:'Seksi Sosial', nama:'-', kontak:'-', keterangan:''},
+    {jabatan:'Seksi OMK', nama:'-', kontak:'-', keterangan:''},
+    {jabatan:'Seksi Katekese', nama:'-', kontak:'-', keterangan:''}
+  ];
+  if (sectionId === 'visi_misi') return [
+    {item:'Visi', uraian:'Menjadi komunitas umat yang beriman, bersatu, dan saling melayani dalam kasih Kristus.'},
+    {item:'Misi 1', uraian:'Membangun persekutuan umat melalui doa dan ibadat bersama secara rutin.'},
+    {item:'Misi 2', uraian:'Meningkatkan pendalaman iman dan pembinaan rohani bagi semua golongan umat.'},
+    {item:'Misi 3', uraian:'Mengembangkan pelayanan kasih sosial bagi yang membutuhkan di lingkungan.'},
+    {item:'Misi 4', uraian:'Menjalin komunikasi dan kerjasama yang harmonis dengan paroki dan lingkungan lain.'}
+  ];
+  return [];
+}
+
+// ============= SIDEBAR =============
+function renderSidebar() {
+  const nav = document.getElementById('sidebarNav');
+  nav.innerHTML = '';
+  
+  // Dashboard link
+  const dashLink = document.createElement('a');
+  dashLink.href = '#';
+  dashLink.className = 'sidebar-link flex items-center gap-3 px-5 py-2.5 text-sm font-medium';
+  dashLink.innerHTML = `<i class="fas fa-gauge-high w-5 text-center" style="color:var(--gold)"></i> Dashboard`;
+  dashLink.onclick = (e) => { e.preventDefault(); showSection('dashboard'); };
+  nav.appendChild(dashLink);
+  
+  CATEGORIES.forEach(cat => {
+    if (cat.items.length === 0) return;
+    
+    const catDiv = document.createElement('div');
+    catDiv.innerHTML = `<div class="category-header">${cat.title}</div>`;
+    
+    cat.items.forEach(item => {
+      const link = document.createElement('a');
+      link.href = '#';
+      link.className = 'sidebar-link flex items-center gap-3 px-5 py-2 text-sm';
+      link.dataset.section = item.id;
+      link.innerHTML = `<i class="fas ${item.icon} w-5 text-center text-xs" style="color:var(--muted)"></i> <span class="truncate">${item.title}</span>`;
+      link.onclick = (e) => { e.preventDefault(); showSection(item.id); };
+      catDiv.appendChild(link);
+    });
+    
+    nav.appendChild(catDiv);
+  });
+  
+  // Settings link
+  const settingsDiv = document.createElement('div');
+  settingsDiv.innerHTML = `
+    <div class="category-header">Pengaturan</div>
+    <a href="#" class="sidebar-link flex items-center gap-3 px-5 py-2 text-sm" onclick="event.preventDefault();showSection('settings');">
+      <i class="fas fa-gear w-5 text-center text-xs" style="color:var(--muted)"></i> <span>Sinkronisasi & Backup</span>
+    </a>
+  `;
+  nav.appendChild(settingsDiv);
+}
+
+// ============= SHOW SECTION =============
+function showSection(sectionId) {
+  currentSection = sectionId;
+  
+  // Update active sidebar
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  const activeLink = document.querySelector(`[data-section="${sectionId}"]`);
+  if (activeLink) activeLink.classList.add('active');
+  
+  const content = document.getElementById('mainContent');
+  content.innerHTML = '';
+  
+  if (sectionId === 'dashboard') {
+    renderDashboard(content);
+    document.getElementById('pageTitle').textContent = 'Dashboard';
+    document.getElementById('pageSubtitle').textContent = 'Ringkasan Administrasi Lingkungan';
+  } else if (sectionId === 'settings') {
+    renderSettings(content);
+    document.getElementById('pageTitle').textContent = 'Pengaturan';
+    document.getElementById('pageSubtitle').textContent = 'Sinkronisasi & Backup Data';
+  } else if (ALL_SECTIONS[sectionId]) {
+    const section = ALL_SECTIONS[sectionId];
+    document.getElementById('pageTitle').textContent = section.title;
+    document.getElementById('pageSubtitle').textContent = CONFIG.lingkunganShort;
+    
+    if (section.isLetter) {
+      renderLetterTemplate(content, section);
+    } else {
+      renderTableSection(content, section);
+    }
+  }
+}
+
+// ============= DASHBOARD =============
+function renderDashboard(container) {
+  const totalSections = Object.keys(ALL_SECTIONS).length;
+  let totalRecords = 0;
+  let filledSections = 0;
+  
+  Object.keys(ALL_SECTIONS).forEach(id => {
+    const data = loadData(id);
+    if (data.length > 0) filledSections++;
+    totalRecords += data.length;
+  });
+  
+  const stats = [
+    { label:'Total Bagian', value:totalSections, icon:'fa-layer-group', color:'burgundy' },
+    { label:'Bagian Terisi', value:filledSections, icon:'fa-check-circle', color:'sage' },
+    { label:'Total Data Tersimpan', value:totalRecords, icon:'fa-database', color:'gold' },
+    { label:'Surat Template', value:3, icon:'fa-file-signature', color:'blue' }
+  ];
+  
+  const html = `
+    <div class="p-6 fade-in">
+      <!-- Hero -->
+      <div class="card p-6 mb-6" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border:none">
+        <div class="flex items-start justify-between">
+          <div class="flex-1">
+            <p class="text-sm opacity-80 mb-1">Selamat Datang di Sistem Administrasi</p>
+            <h2 class="font-serif text-3xl font-bold mb-2">Lingkungan Taman Sari 8/9<br>St. Theofilus</h2>
+            <p class="text-sm opacity-90 max-w-2xl">${CONFIG.paroki} &mdash; ${CONFIG.keuskupan}</p>
+            <div class="flex flex-wrap gap-4 mt-4 text-xs opacity-90">
+              <span><i class="fas fa-user-tie mr-1.5"></i> Ketua: ${CONFIG.ketua}</span>
+              <span><i class="fas fa-cross mr-1.5"></i> Pastor: ${CONFIG.pastor}</span>
+            </div>
+          </div>
+          <div class="hidden md:block">
+            <div class="w-24 h-24 rounded-full bg-white/10 flex items-center justify-center p-3">
+              <img src="${CONFIG.logoUrl}" alt="Logo" onerror="this.style.display='none'" class="w-full h-full object-contain">
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Stats -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        ${stats.map(s => `
+          <div class="card stat-card ${s.color} p-5 card-hover">
+            <div class="icon-wrap mb-3" style="background:rgba(107,31,42,0.08)">
+              <i class="fas ${s.icon}" style="color:var(--primary)"></i>
+            </div>
+            <div class="font-serif text-3xl font-bold" style="color:var(--primary)">${s.value}</div>
+            <div class="text-xs text-gray-500 mt-1">${s.label}</div>
+          </div>
+        `).join('')}
+      </div>
+      
+      <!-- Quick Access -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="card p-5">
+          <h3 class="font-serif text-lg font-bold mb-4" style="color:var(--primary)">
+            <i class="fas fa-bolt mr-2" style="color:var(--gold)"></i>Akses Cepat
+          </h3>
+          <div class="grid grid-cols-2 gap-2">
+            ${['kk','umat','struktur','kas_umum','tpl_undangan','tpl_keterangan'].map(id => {
+              const s = ALL_SECTIONS[id];
+              return `<button onclick="showSection('${id}')" class="btn-outline p-3 rounded-lg text-left text-sm font-medium">
+                <i class="fas ${s.icon} mr-2" style="color:var(--gold)"></i>${s.title}
+              </button>`;
+            }).join('')}
+          </div>
+        </div>
+        
+        <div class="card p-5">
+          <h3 class="font-serif text-lg font-bold mb-4" style="color:var(--primary)">
+            <i class="fas fa-chart-pie mr-2" style="color:var(--gold)"></i>Status Pengisian Data
+          </h3>
+          <div class="space-y-2 max-h-64 overflow-y-auto scrollbar-thin">
+            ${CATEGORIES.filter(c=>c.items.length>0).map(cat => `
+              <div class="mb-2">
+                <div class="text-xs font-bold text-gray-500 uppercase mb-1">${cat.title}</div>
+                ${cat.items.map(item => {
+                  const count = loadData(item.id).length;
+                  return `<div class="flex items-center justify-between text-sm py-1">
+                    <span class="${count>0?'text-gray-700':'text-gray-400'}">${item.title}</span>
+                    <span class="badge ${count>0?'badge-green':'badge-red'}">${count} data</span>
+                  </div>`;
+                }).join('')}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+      
+      <!-- Categories Grid -->
+      <div class="card p-5">
+        <h3 class="font-serif text-lg font-bold mb-4" style="color:var(--primary)">
+          <i class="fas fa-folder-tree mr-2" style="color:var(--gold)"></i>Kategori Administrasi
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          ${CATEGORIES.filter(c=>c.items.length>0).map(cat => `
+            <div class="border rounded-lg p-4 card-hover" style="border-color:var(--border)">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="icon-wrap" style="background:rgba(184,148,63,0.12)">
+                  <i class="fas ${cat.icon}" style="color:var(--gold)"></i>
+                </div>
+                <h4 class="font-semibold text-sm" style="color:var(--primary)">${cat.title}</h4>
+              </div>
+              <div class="space-y-1">
+                ${cat.items.map(item => `
+                  <a href="#" onclick="showSection('${item.id}');return false;" class="block text-xs text-gray-600 hover:text-gray-900 hover:underline py-0.5">
+                    <i class="fas fa-chevron-right text-[10px] mr-1" style="color:var(--gold)"></i>${item.title}
+                  </a>
+                `).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+  container.innerHTML = html;
+}
+
+// ============= TABLE SECTION =============
+function renderTableSection(container, section) {
+  const data = loadData(section.id);
+  
+  const html = `
+    <div class="p-6 fade-in">
+      <div class="card p-5">
+        <!-- Toolbar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <div class="flex items-center gap-3 flex-1 min-w-[200px]">
+            <div class="relative flex-1 max-w-xs">
+              <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+              <input type="text" id="searchInput" placeholder="Cari data..." 
+                class="form-input pl-9" oninput="filterTable('${section.id}', this.value)">
+            </div>
+            <span class="text-sm text-gray-500">${data.length} record</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="exportCSV('${section.id}')" class="btn-outline px-4 py-2 rounded-lg text-sm font-medium">
+              <i class="fas fa-file-csv mr-1.5"></i>CSV
+            </button>
+            <button onclick="printSection('${section.id}')" class="btn-outline px-4 py-2 rounded-lg text-sm font-medium">
+              <i class="fas fa-print mr-1.5"></i>Print
+            </button>
+            <button onclick="openModal('${section.id}')" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">
+              <i class="fas fa-plus mr-1.5"></i>Tambah
+            </button>
+          </div>
+        </div>
+        
+        <!-- Table -->
+        <div class="overflow-x-auto scrollbar-thin">
+          ${data.length === 0 ? `
+            <div class="text-center py-16">
+              <i class="fas fa-inbox text-5xl text-gray-300 mb-3"></i>
+              <p class="text-gray-400">Belum ada data. Klik "Tambah" untuk menambahkan.</p>
+            </div>
+          ` : `
+            <table class="data-table" id="dataTable">
+              <thead>
+                <tr>
+                  <th style="width:50px">No</th>
+                  ${section.fields.map(f => `<th>${f.label}</th>`).join('')}
+                  <th style="width:100px;text-align:center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                ${data.map((row, i) => `
+                  <tr>
+                    <td class="text-gray-400 font-mono text-xs">${i+1}</td>
+                    ${section.fields.map(f => {
+                      let val = row[f.name] || '';
+                      if (f.type === 'date' && val) val = formatDate(val);
+                      if (f.type === 'textarea') val = val.length > 60 ? val.substring(0,60)+'...' : val;
+                      return `<td>${escapeHtml(val)}</td>`;
+                    }).join('')}
+                    <td class="text-center">
+                      <button onclick="openModal('${section.id}','${row._id}')" class="text-blue-600 hover:text-blue-800 mx-1" title="Edit">
+                        <i class="fas fa-pen-to-square"></i>
+                      </button>
+                      <button onclick="deleteRow('${section.id}','${row._id}')" class="text-red-600 hover:text-red-800 mx-1" title="Hapus">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          `}
+        </div>
+      </div>
+    </div>
+  `;
+  container.innerHTML = html;
+}
+
+// ============= MODAL =============
+function openModal(sectionId, editId = null) {
+  const section = ALL_SECTIONS[sectionId];
+  editingId = editId;
+  
+  document.getElementById('modalTitle').textContent = editId ? 'Edit Data' : `Tambah ${section.title}`;
+  
+  const fieldsContainer = document.getElementById('modalFields');
+  fieldsContainer.innerHTML = '';
+  
+  let existingData = {};
+  if (editId) {
+    const data = loadData(sectionId);
+    existingData = data.find(r => r._id === editId) || {};
+  }
+  
+  section.fields.forEach(field => {
+    const isFullWidth = field.type === 'textarea';
+    const div = document.createElement('div');
+    div.className = isFullWidth ? 'md:col-span-2' : '';
+    
+    let inputHtml = '';
+    const val = existingData[field.name] || '';
+    
+    if (field.type === 'textarea') {
+      inputHtml = `<textarea name="${field.name}" class="form-input" rows="3">${escapeHtml(val)}</textarea>`;
+    } else if (field.type === 'select') {
+      inputHtml = `<select name="${field.name}" class="form-input">
+        <option value="">Pilih...</option>
+        ${field.options.map(o => `<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('')}
+      </select>`;
+    } else {
+      inputHtml = `<input type="${field.type}" name="${field.name}" value="${escapeHtml(val)}" class="form-input">`;
+    }
+    
+    div.innerHTML = `<label class="form-label">${field.label}</label>${inputHtml}`;
+    fieldsContainer.appendChild(div);
+  });
+  
+  document.getElementById('modal').classList.remove('hidden');
+  document.getElementById('modal').classList.add('flex');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.add('hidden');
+  document.getElementById('modal').classList.remove('flex');
+  editingId = null;
+}
+
+function saveData(event) {
+  event.preventDefault();
+  const section = ALL_SECTIONS[currentSection];
+  const formData = new FormData(event.target);
+  const newData = {};
+  section.fields.forEach(f => {
+    newData[f.name] = formData.get(f.name);
+  });
+  
+  const data = loadData(section.id);
+  
+  if (editingId) {
+    const idx = data.findIndex(r => r._id === editingId);
+    if (idx >= 0) {
+      newData._id = editingId;
+      data[idx] = newData;
+    }
+  } else {
+    newData._id = generateId();
+    data.push(newData);
+  }
+  
+  saveDataToStorage(section.id, data);
+  closeModal();
+  showSection(currentSection);
+  showToast(editingId ? 'Data berhasil diperbarui' : 'Data berhasil ditambahkan', 'success');
+}
+
+function deleteRow(sectionId, rowId) {
+  if (!confirm('Yakin ingin menghapus data ini?')) return;
+  let data = loadData(sectionId);
+  data = data.filter(r => r._id !== rowId);
+  saveDataToStorage(sectionId, data);
+  showSection(currentSection);
+  showToast('Data berhasil dihapus', 'success');
+}
+
+function filterTable(sectionId, query) {
+  const tbody = document.getElementById('tableBody');
+  if (!tbody) return;
+  const rows = tbody.querySelectorAll('tr');
+  const q = query.toLowerCase();
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = text.includes(q) ? '' : 'none';
+  });
+}
+
+// ============= LETTER TEMPLATES =============
+function renderLetterTemplate(container, section) {
+  const data = loadData(section.id);
+  
+  const html = `
+    <div class="p-6 fade-in">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Form -->
+        <div class="card p-5 no-print">
+          <h3 class="font-serif text-lg font-bold mb-4" style="color:var(--primary)">
+            <i class="fas fa-pen mr-2" style="color:var(--gold)"></i>Isi Data Surat
+          </h3>
+          <div id="letterForm" class="space-y-3"></div>
+          <div class="flex gap-2 mt-4">
+            <button onclick="saveLetter('${section.id}','${section.letterType}')" class="btn-primary px-4 py-2 rounded-lg text-sm flex-1">
+              <i class="fas fa-save mr-1.5"></i>Simpan & Preview
+            </button>
+            <button onclick="printLetter('${section.letterType}')" class="btn-gold px-4 py-2 rounded-lg text-sm flex-1">
+              <i class="fas fa-print mr-1.5"></i>Print Surat
+            </button>
+          </div>
+          
+          <div class="mt-6 pt-4 border-t" style="border-color:var(--border)">
+            <h4 class="text-sm font-bold mb-2" style="color:var(--primary)">Surat Tersimpan</h4>
+            <div class="space-y-1 max-h-40 overflow-y-auto scrollbar-thin">
+              ${data.length === 0 ? '<p class="text-xs text-gray-400">Belum ada surat tersimpan</p>' : 
+                data.map(s => `
+                  <div class="flex items-center justify-between text-xs p-2 rounded hover:bg-gray-50">
+                    <span class="truncate flex-1">${s.perihal || s.nama || s.tujuan || 'Surat'}</span>
+                    <button onclick="loadLetter('${section.id}','${s._id}','${section.letterType}')" class="text-blue-600 mx-1"><i class="fas fa-edit"></i></button>
+                    <button onclick="deleteRow('${section.id}','${s._id}')" class="text-red-600 mx-1"><i class="fas fa-trash"></i></button>
+                  </div>
+                `).join('')
+              }
+            </div>
+          </div>
+        </div>
+        
+        <!-- Preview -->
+        <div class="card p-0 overflow-hidden">
+          <div class="bg-gray-100 px-4 py-2 border-b no-print" style="border-color:var(--border)">
+            <span class="text-xs font-semibold text-gray-500"><i class="fas fa-eye mr-1"></i>PREVIEW SURAT</span>
+          </div>
+          <div id="letterPreview" class="p-8 bg-white letter-preview" style="min-height:600px"></div>
+        </div>
+      </div>
+    </div>
+  `;
+  container.innerHTML = html;
+  
+  // Render form based on letter type
+  renderLetterForm(section.letterType);
+  updateLetterPreview(section.letterType);
+}
+
+function renderLetterForm(type) {
+  const form = document.getElementById('letterForm');
+  let fields = [];
+  
+  if (type === 'undangan') {
+    fields = [
+      {name:'nomor', label:'Nomor Surat', placeholder:'.../ST-VIII/UND/.../2024'},
+      {name:'perihal', label:'Perihal', placeholder:'Undangan Rapat Pengurus'},
+      {name:'tujuan', label:'Tujuan', placeholder:'Seluruh Pengurus Lingkungan'},
+      {name:'hari', label:'Hari', placeholder:'Sabtu'},
+      {name:'tanggal', label:'Tanggal Kegiatan', type:'date'},
+      {name:'waktu', label:'Waktu', placeholder:'19:00 WIB'},
+      {name:'tempat', label:'Tempat', placeholder:'Rumah Bpk/Ibu...'},
+      {name:'acara', label:'Acara', placeholder:'Rapat Bulanan Pengurus'},
+      {name:'isi', label:'Isi Surat (opsional)', type:'textarea', placeholder:'Tambahan keterangan...'}
+    ];
+  } else if (type === 'keterangan') {
+    fields = [
+      {name:'nomor', label:'Nomor Surat', placeholder:'.../ST-VIII/KET/.../2024'},
+      {name:'nama', label:'Nama', placeholder:'Nama lengkap'},
+      {name:'ttl', label:'Tempat/Tanggal Lahir', placeholder:'Jakarta, 1 Januari 1980'},
+      {name:'alamat', label:'Alamat', placeholder:'Jl. ...'},
+      {name:'pekerjaan', label:'Pekerjaan', placeholder:'Swasta'},
+      {name:'keperluan', label:'Keperluan', placeholder:'Untuk keperluan administrasi'},
+      {name:'tanggal', label:'Tanggal Surat', type:'date'}
+    ];
+  } else if (type === 'tugas') {
+    fields = [
+      {name:'nomor', label:'Nomor Surat', placeholder:'.../ST-VIII/TGS/.../2024'},
+      {name:'nama', label:'Nama', placeholder:'Nama lengkap'},
+      {name:'tugas', label:'Tugas', placeholder:'Mewakili Lingkungan dalam kegiatan...'},
+      {name:'tempat_tugas', label:'Tempat Tugas', placeholder:'Paroki Mangga Besar'},
+      {name:'tanggal_tugas', label:'Tanggal Tugas', type:'date'},
+      {name:'tanggal', label:'Tanggal Surat', type:'date'}
+    ];
+  }
+  
+  form.innerHTML = fields.map(f => `
+    <div>
+      <label class="form-label">${f.label}</label>
+      ${f.type === 'textarea' ? 
+        `<textarea name="${f.name}" placeholder="${f.placeholder||''}" class="form-input" rows="3" oninput="updateLetterPreview('${type}')"></textarea>` :
+        `<input type="${f.type||'text'}" name="${f.name}" placeholder="${f.placeholder||''}" class="form-input" oninput="updateLetterPreview('${type}')" onfocus="if(this.type==='date')updateLetterPreview('${type}')" onblur="updateLetterPreview('${type}')">`
+      }
+    </div>
+  `).join('');
+}
+
+function getLetterFormData() {
+  const form = document.getElementById('letterForm');
+  const inputs = form.querySelectorAll('input, textarea, select');
+  const data = {};
+  inputs.forEach(input => { data[input.name] = input.value; });
+  return data;
+}
+
+function generateKopSurat() {
+  return `
+    <div class="kop-surat" style="display:flex;align-items:flex-start;gap:15px">
+      <div style="width:80px;height:80px;flex-shrink:0">
+        <img src="${CONFIG.logoUrl}" alt="Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" style="width:100%;height:100%;object-fit:contain">
+        <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;border:2px solid #6b1f2a;border-radius:50%">
+          <span style="font-size:24px;font-weight:bold;color:#6b1f2a">P&P</span>
+        </div>
+      </div>
+      <div style="flex:1;text-align:center">
+        <div style="font-size:13px;font-weight:bold">${CONFIG.keuskupan}</div>
+        <div style="font-size:15px;font-weight:bold">${CONFIG.paroki}</div>
+        <div style="font-size:13px;font-weight:bold">${CONFIG.lingkungan}</div>
+        <div style="font-size:10px;margin-top:3px;color:#555">
+          ${CONFIG.alamat} &bull; Telp. ${CONFIG.telp}<br>
+          Email: ${CONFIG.email}
+        </div>
+      </div>
+      <div style="width:80px;flex-shrink:0"></div>
+    </div>
+  `;
+}
+
+function updateLetterPreview(type) {
+  const data = getLetterFormData();
+  const preview = document.getElementById('letterPreview');
+  if (!preview) return;
+  
+  const today = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
+  
+  let body = '';
+  
+  if (type === 'undangan') {
+    body = `
+      <div style="text-align:right;margin-bottom:20px;font-size:11px">
+        Jakarta, ${data.tanggal ? formatDate(data.tanggal) : today}<br>
+        Nomor: ${data.nomor || '...'}<br>
+        Perihal: ${data.perihal || 'Undangan'}
+      </div>
+      <p style="margin-bottom:15px">Kepada Yth,<br>
+      <strong>${data.tujuan || '...'}</strong><br>
+      Di Tempat</p>
+      <p style="margin-bottom:10px">Dengan hormat,</p>
+      <p style="margin-bottom:15px;text-align:justify">Sehubungan dengan kegiatan ${data.acara || '...'} yang akan dilaksanakan oleh Lingkungan Taman Sari 8/9 St. Theofilus, dengan ini kami mengundang Bapak/Ibu/Saudara/i untuk hadir pada:</p>
+      <table style="margin:0 auto 15px;font-size:12px;border-collapse:collapse">
+        <tr><td style="padding:3px 10px;font-weight:bold">Hari</td><td style="padding:3px 10px">:</td><td style="padding:3px 10px">${data.hari || '...'}</td></tr>
+        <tr><td style="padding:3px 10px;font-weight:bold">Tanggal</td><td style="padding:3px 10px">:</td><td style="padding:3px 10px">${data.tanggal ? formatDate(data.tanggal) : '...'}</td></tr>
+        <tr><td style="padding:3px 10px;font-weight:bold">Waktu</td><td style="padding:3px 10px">:</td><td style="padding:3px 10px">${data.waktu || '...'}</td></tr>
+        <tr><td style="padding:3px 10px;font-weight:bold">Tempat</td><td style="padding:3px 10px">:</td><td style="padding:3px 10px">${data.tempat || '...'}</td></tr>
+        <tr><td style="padding:3px 10px;font-weight:bold">Acara</td><td style="padding:3px 10px">:</td><td style="padding:3px 10px">${data.acara || '...'}</td></tr>
+      </table>
+      ${data.isi ? `<p style="margin-bottom:15px;text-align:justify">${data.isi}</p>` : ''}
+      <p style="margin-bottom:30px;text-align:justify">Demikian undangan ini kami sampaikan. Atas perhatian dan kehadirannya, kami ucapkan terima kasih.</p>
+      <div style="text-align:right;margin-right:40px">
+        <p style="margin-bottom:50px">Hormat kami,</p>
+        <p style="font-weight:bold;text-decoration:underline">${CONFIG.ketua}</p>
+        <p style="font-size:11px">Ketua Lingkungan</p>
+      </div>
+    `;
+  } else if (type === 'keterangan') {
+    body = `
+      <div style="text-align:center;margin:15px 0 20px">
+        <div style="font-size:16px;font-weight:bold;text-transform:uppercase;text-decoration:underline;margin-bottom:5px">Surat Keterangan</div>
+        <div style="font-size:11px">Nomor: ${data.nomor || '...'}</div>
+      </div>
+      <p style="margin-bottom:15px">Yang bertanda tangan di bawah ini, Ketua ${CONFIG.lingkungan}, ${CONFIG.paroki}, ${CONFIG.keuskupan}, dengan ini menerangkan bahwa:</p>
+      <table style="margin:0 auto 20px;font-size:12px;border-collapse:collapse;width:90%">
+        <tr><td style="padding:4px 10px;width:140px;font-weight:bold">Nama</td><td style="padding:4px 10px">:</td><td style="padding:4px 10px">${data.nama || '...'}</td></tr>
+        <tr><td style="padding:4px 10px;font-weight:bold">Tempat/Tgl Lahir</td><td style="padding:4px 10px">:</td><td style="padding:4px 10px">${data.ttl || '...'}</td></tr>
+        <tr><td style="padding:4px 10px;font-weight:bold">Alamat</td><td style="padding:4px 10px">:</td><td style="padding:4px 10px">${data.alamat || '...'}</td></tr>
+        <tr><td style="padding:4px 10px;font-weight:bold">Pekerjaan</td><td style="padding:4px 10px">:</td><td style="padding:4px 10px">${data.pekerjaan || '...'}</td></tr>
+        <tr><td style="padding:4px 10px;font-weight:bold">Keperluan</td><td style="padding:4px 10px">:</td><td style="padding:4px 10px">${data.keperluan || '...'}</td></tr>
+      </table>
+      <p style="margin-bottom:30px;text-align:justify">Demikian surat keterangan ini dibuat dengan sebenarnya untuk dipergunakan sebagaimana mestinya.</p>
+      <div style="text-align:right;margin-right:40px">
+        <p style="margin-bottom:3px">Jakarta, ${data.tanggal ? formatDate(data.tanggal) : today}</p>
+        <p style="margin-bottom:50px">Ketua Lingkungan,</p>
+        <p style="font-weight:bold;text-decoration:underline">${CONFIG.ketua}</p>
+      </div>
+    `;
+  } else if (type === 'tugas') {
+    body = `
+      <div style="text-align:center;margin:15px 0 20px">
+        <div style="font-size:16px;font-weight:bold;text-transform:uppercase;text-decoration:underline;margin-bottom:5px">Surat Tugas</div>
+        <div style="font-size:11px">Nomor: ${data.nomor || '...'}</div>
+      </div>
+      <p style="margin-bottom:15px">Yang bertanda tangan di bawah ini, Ketua ${CONFIG.lingkungan}, ${CONFIG.paroki}, ${CONFIG.keuskupan}, dengan ini memberikan tugas kepada:</p>
+      <table style="margin:0 auto 15px;font-size:12px;border-collapse:collapse;width:90%">
+        <tr><td style="padding:4px 10px;width:140px;font-weight:bold">Nama</td><td style="padding:4px 10px">:</td><td style="padding:4px 10px">${data.nama || '...'}</td></tr>
+        <tr><td style="padding:4px 10px;font-weight:bold">Tugas</td><td style="padding:4px 10px">:</td><td style="padding:4px 10px">${data.tugas || '...'}</td></tr>
+        <tr><td style="padding:4px 10px;font-weight:bold">Tempat</td><td style="padding:4px 10px">:</td><td style="padding:4px 10px">${data.tempat_tugas || '...'}</td></tr>
+        <tr><td style="padding:4px 10px;font-weight:bold">Tanggal</td><td style="padding:4px 10px">:</td><td style="padding:4px 10px">${data.tanggal_tugas ? formatDate(data.tanggal_tugas) : '...'}</td></tr>
+      </table>
+      <p style="margin-bottom:30px;text-align:justify">Untuk melaksanakan tugas tersebut di atas dengan penuh tanggung jawab dan mewakili Lingkungan St. Theofilus.</p>
+      <p style="margin-bottom:30px;text-align:justify">Demikian surat tugas ini dibuat untuk dilaksanakan dengan penuh tanggung jawab.</p>
+      <div style="text-align:right;margin-right:40px">
+        <p style="margin-bottom:3px">Jakarta, ${data.tanggal ? formatDate(data.tanggal) : today}</p>
+        <p style="margin-bottom:50px">Ketua Lingkungan,</p>
+        <p style="font-weight:bold;text-decoration:underline">${CONFIG.ketua}</p>
+      </div>
+    `;
+  }
+  
+  preview.innerHTML = generateKopSurat() + body;
+}
+
+function saveLetter(sectionId, type) {
+  const data = getLetterFormData();
+  const existing = loadData(sectionId);
+  
+  // Check if editing
+  const editingLetter = document.getElementById('letterForm').dataset.editingId;
+  
+  if (editingLetter) {
+    const idx = existing.findIndex(r => r._id === editingLetter);
+    if (idx >= 0) {
+      data._id = editingLetter;
+      existing[idx] = data;
+    }
+    delete document.getElementById('letterForm').dataset.editingId;
+  } else {
+    data._id = generateId();
+    existing.push(data);
+  }
+  
+  saveDataToStorage(sectionId, existing);
+  updateLetterPreview(type);
+  showToast('Surat berhasil disimpan', 'success');
+  
+  // Refresh to show saved list
+  const section = ALL_SECTIONS[sectionId];
+  renderLetterTemplate(document.getElementById('mainContent'), section);
+}
+
+function loadLetter(sectionId, letterId, type) {
+  const data = loadData(sectionId);
+  const letter = data.find(r => r._id === letterId);
+  if (!letter) return;
+  
+  // Populate form
+  Object.keys(letter).forEach(key => {
+    if (key === '_id') return;
+    const input = document.querySelector(`#letterForm [name="${key}"]`);
+    if (input) input.value = letter[key];
+  });
+  
+  document.getElementById('letterForm').dataset.editingId = letterId;
+  updateLetterPreview(type);
+  showToast('Surat dimuat untuk diedit', 'info');
+}
+
+function printLetter(type) {
+  const preview = document.getElementById('letterPreview');
+  if (!preview) return;
+  
+  const printArea = document.getElementById('printArea');
+  printArea.innerHTML = `<div class="print-container" style="padding:30px;background:white;max-width:800px;margin:0 auto">${preview.innerHTML}</div>`;
+  printArea.classList.remove('hidden');
+  printArea.classList.add('print-only');
+  
+  window.print();
+  
+  setTimeout(() => {
+    printArea.classList.add('hidden');
+    printArea.classList.remove('print-only');
+    printArea.innerHTML = '';
+  }, 500);
+}
+
+// ============= PRINT SECTION =============
+function printSection(sectionId) {
+  const section = ALL_SECTIONS[sectionId];
+  const data = loadData(sectionId);
+  
+  const printArea = document.getElementById('printArea');
+  
+  let tableHtml = '';
+  if (data.length === 0) {
+    tableHtml = '<p style="text-align:center;padding:40px;color:#999">Belum ada data</p>';
+  } else {
+    tableHtml = `
+      <table style="width:100%;border-collapse:collapse;font-size:11px;margin-top:10px">
+        <thead>
+          <tr style="background:#6b1f2a;color:white">
+            <th style="padding:8px;border:1px solid #6b1f2a;width:30px">No</th>
+            ${section.fields.map(f => `<th style="padding:8px;border:1px solid #6b1f2a;text-align:left">${f.label}</th>`).join('')}
+          </tr>
+        </thead>
+        <tbody>
+          ${data.map((row, i) => `
+            <tr style="${i%2===0?'background:#faf7f0':''}">
+              <td style="padding:6px 8px;border:1px solid #ddd;text-align:center">${i+1}</td>
+              ${section.fields.map(f => {
+                let val = row[f.name] || '';
+                if (f.type === 'date' && val) val = formatDate(val);
+                return `<td style="padding:6px 8px;border:1px solid #ddd">${escapeHtml(val)}</td>`;
+              }).join('')}
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+  
+  printArea.innerHTML = `
+    <div class="print-container" style="padding:30px;background:white;max-width:900px;margin:0 auto;font-family:'Times New Roman',serif">
+      ${generateKopSurat()}
+      <div style="text-align:center;margin:20px 0">
+        <h2 style="font-size:16px;font-weight:bold;text-transform:uppercase;text-decoration:underline;margin:0">${section.title}</h2>
+      </div>
+      ${tableHtml}
+      <div style="margin-top:50px;display:flex;justify-content:space-between">
+        <div></div>
+        <div style="text-align:center">
+          <p style="margin:0 0 50px 0">Jakarta, ${new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</p>
+          <p style="margin:0;font-weight:bold;text-decoration:underline">${CONFIG.ketua}</p>
+          <p style="margin:0;font-size:11px">Ketua Lingkungan</p>
+        </div>
+      </div>
+    </div>
+  `;
+  printArea.classList.remove('hidden');
+  printArea.classList.add('print-only');
+  
+  window.print();
+  
+  setTimeout(() => {
+    printArea.classList.add('hidden');
+    printArea.classList.remove('print-only');
+    printArea.innerHTML = '';
+  }, 500);
+}
+
+// ============= SETTINGS =============
+function renderSettings(container) {
+  const html = `
+    <div class="p-6 fade-in max-w-4xl">
+      <!-- Google Sheets Integration -->
+      <div class="card p-6 mb-6">
+        <h3 class="font-serif text-xl font-bold mb-4" style="color:var(--primary)">
+          <i class="fas fa-cloud mr-2" style="color:var(--gold)"></i>Integrasi Google Sheets
+        </h3>
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+          <div class="flex items-start gap-3">
+            <i class="fas fa-info-circle text-blue-600 text-lg mt-0.5"></i>
+            <div class="text-sm text-blue-900">
+              <p class="font-semibold mb-1">Informasi Google Sheets</p>
+              <p>Google Sheet ID: <code class="bg-white px-2 py-0.5 rounded text-xs">${CONFIG.sheetId}</code></p>
+              <p class="mt-1">Data tersimpan secara lokal di browser (localStorage). Untuk sinkronisasi otomatis dengan Google Sheets, deploy Google Apps Script di bawah ini sebagai Web App.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex gap-3 mb-4">
+          <button onclick="window.open('https://docs.google.com/spreadsheets/d/${CONFIG.sheetId}/edit','_blank')" class="btn-primary px-4 py-2 rounded-lg text-sm">
+            <i class="fas fa-external-link-alt mr-1.5"></i>Buka Google Sheets
+          </button>
+          <button onclick="syncToSheets()" class="btn-gold px-4 py-2 rounded-lg text-sm">
+            <i class="fas fa-sync mr-1.5"></i>Sync ke Google Sheets
+          </button>
+        </div>
+        
+        <details class="mt-4">
+          <summary class="cursor-pointer text-sm font-semibold" style="color:var(--primary)">
+            <i class="fas fa-code mr-1"></i>Lihat Kode Google Apps Script untuk Deploy
+          </summary>
+          <div class="mt-3">
+            <p class="text-xs text-gray-500 mb-2">1. Buka Google Sheets &gt; Extensions &gt; Apps Script. 2. Paste kode berikut. 3. Deploy as Web App (Anyone). 4. Copy URL Web App ke field di bawah.</p>
+            <pre class="bg-gray-900 text-gray-100 p-4 rounded-lg text-xs overflow-x-auto scrollbar-thin"><code>function doPost(e) {
+  const ss = SpreadsheetApp.openById('${CONFIG.sheetId}');
+  const data = JSON.parse(e.postData.contents);
+  const sheet = ss.getSheetByName(data.sheet) || ss.insertSheet(data.sheet);
+  sheet.clear();
+  if (data.rows.length > 0) {
+    const headers = Object.keys(data.rows[0]).filter(k => k !== '_id');
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    sheet.getRange(2, 1, data.rows.length, headers.length)
+      .setValues(data.rows.map(r => headers.map(h => r[h] || '')));
+  }
+  return ContentService.createTextOutput(JSON.stringify({status:'ok'}))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet(e) {
+  const ss = SpreadsheetApp.openById('${CONFIG.sheetId}');
+  const sheet = ss.getSheetByName(e.parameter.sheet);
+  if (!sheet) return ContentService.createTextOutput('[]');
+  const data = sheet.getDataRange().getValues();
+  const headers = data[0];
+  const rows = data.slice(1).map((r, i) => {
+    const obj = {_id: 'row_'+i};
+    headers.forEach((h, j) => obj[h] = r[j]);
+    return obj;
+  });
+  return ContentService.createTextOutput(JSON.stringify(rows))
+    .setMimeType(ContentService.MimeType.JSON);
+}</code></pre>
+            <div class="mt-3">
+              <label class="form-label">URL Web App (setelah deploy)</label>
+              <input type="text" id="webAppUrl" placeholder="https://script.google.com/macros/s/.../exec" class="form-input" value="${localStorage.getItem('webAppUrl')||''}">
+              <button onclick="saveWebAppUrl()" class="btn-outline px-4 py-2 rounded-lg text-sm mt-2">Simpan URL</button>
+            </div>
+          </div>
+        </details>
+      </div>
+      
+      <!-- Backup & Restore -->
+      <div class="card p-6 mb-6">
+        <h3 class="font-serif text-xl font-bold mb-4" style="color:var(--primary)">
+          <i class="fas fa-database mr-2" style="color:var(--gold)"></i>Backup &amp; Restore Data
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm text-gray-600 mb-3">Ekspor semua data ke file JSON untuk backup.</p>
+            <button onclick="exportAllData()" class="btn-primary px-5 py-2 rounded-lg text-sm w-full">
+              <i class="fas fa-download mr-1.5"></i>Download Backup (JSON)
+            </button>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600 mb-3">Impor data dari file JSON backup.</p>
+            <label class="btn-outline px-5 py-2 rounded-lg text-sm w-full text-center cursor-pointer block">
+              <i class="fas fa-upload mr-1.5"></i>Restore dari JSON
+              <input type="file" accept=".json" onchange="importAllData(event)" class="hidden">
+            </label>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t" style="border-color:var(--border)">
+          <button onclick="clearAllData()" class="text-sm text-red-600 hover:text-red-800">
+            <i class="fas fa-trash-can mr-1"></i>Hapus Semua Data Lokal
+          </button>
+        </div>
+      </div>
+      
+      <!-- Info -->
+      <div class="card p-6">
+        <h3 class="font-serif text-xl font-bold mb-4" style="color:var(--primary)">
+          <i class="fas fa-circle-info mr-2" style="color:var(--gold)"></i>Informasi Aplikasi
+        </h3>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between py-1 border-b" style="border-color:var(--border)"><span class="text-gray-500">Nama Aplikasi</span><span class="font-semibold">Sistem Administrasi Lingkungan St. Theofilus</span></div>
+          <div class="flex justify-between py-1 border-b" style="border-color:var(--border)"><span class="text-gray-500">Lingkungan</span><span class="font-semibold">${CONFIG.lingkungan}</span></div>
+          <div class="flex justify-between py-1 border-b" style="border-color:var(--border)"><span class="text-gray-500">Paroki</span><span class="font-semibold">${CONFIG.paroki}</span></div>
+          <div class="flex justify-between py-1 border-b" style="border-color:var(--border)"><span class="text-gray-500">Keuskupan</span><span class="font-semibold">${CONFIG.keuskupan}</span></div>
+          <div class="flex justify-between py-1 border-b" style="border-color:var(--border)"><span class="text-gray-500">Ketua Lingkungan</span><span class="font-semibold">${CONFIG.ketua}</span></div>
+          <div class="flex justify-between py-1 border-b" style="border-color:var(--border)"><span class="text-gray-500">Pastor Paroki</span><span class="font-semibold">${CONFIG.pastor}</span></div>
+          <div class="flex justify-between py-1"><span class="text-gray-500">Total Bagian</span><span class="font-semibold">${Object.keys(ALL_SECTIONS).length} bagian</span></div>
+        </div>
+      </div>
+    </div>
+  `;
+  container.innerHTML = html;
+}
+
+// ============= SYNC FUNCTIONS =============
+function saveWebAppUrl() {
+  const url = document.getElementById('webAppUrl').value.trim();
+  localStorage.setItem('webAppUrl', url);
+  showToast('URL Web App disimpan', 'success');
+}
+
+async function syncToSheets() {
+  const webAppUrl = localStorage.getItem('webAppUrl');
+  if (!webAppUrl) {
+    showToast('Setel URL Web App terlebih dahulu di Pengaturan', 'error');
+    return;
+  }
+  
+  showToast('Sedang sinkronisasi...', 'info');
+  let success = 0, fail = 0;
+  
+  for (const sectionId of Object.keys(ALL_SECTIONS)) {
+    const section = ALL_SECTIONS[sectionId];
+    if (section.isLetter) continue;
+    const data = loadData(sectionId);
+    try {
+      await fetch(webAppUrl, {
+        method: 'POST',
+        body: JSON.stringify({ sheet: section.title, rows: data })
+      });
+      success++;
+    } catch (e) {
+      fail++;
+    }
+  }
+  
+  showToast(`Sync selesai: ${success} berhasil, ${fail} gagal`, success > 0 ? 'success' : 'error');
+}
+
+// ============= UTILITY FUNCTIONS =============
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).substring(2, 7);
+}
+
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  try {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+  } catch { return dateStr; }
+}
+
+function showToast(message, type = 'success') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  const colors = {
+    success: 'bg-green-600',
+    error: 'bg-red-600',
+    info: 'bg-blue-600'
+  };
+  const icons = {
+    success: 'fa-check-circle',
+    error: 'fa-exclamation-circle',
+    info: 'fa-info-circle'
+  };
+  toast.className = `toast ${colors[type]} text-white px-5 py-3 rounded-lg shadow-lg text-sm font-medium flex items-center gap-2`;
+  toast.innerHTML = `<i class="fas ${icons[type]}"></i>${message}`;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+function exportCSV(sectionId) {
+  const section = ALL_SECTIONS[sectionId];
+  const data = loadData(sectionId);
+  
+  if (data.length === 0) {
+    showToast('Tidak ada data untuk diekspor', 'error');
+    return;
+  }
+  
+  const headers = section.fields.map(f => f.label);
+  const rows = data.map(row => section.fields.map(f => `"${(row[f.name]||'').toString().replace(/"/g,'""')}"`));
+  
+  const csv = [headers.map(h => `"${h}"`).join(','), ...rows.map(r => r.join(','))].join('\n');
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `${section.title}_${new Date().toISOString().slice(0,10)}.csv`;
+  link.click();
+  
+  showToast('CSV berhasil diunduh', 'success');
+}
+
+function exportAllData() {
+  const allData = {};
+  Object.keys(ALL_SECTIONS).forEach(id => {
+    allData[id] = loadData(id);
+  });
+  allData._meta = { exportDate: new Date().toISOString(), config: CONFIG };
+  
+  const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `backup_lingkungan_st_theofilus_${new Date().toISOString().slice(0,10)}.json`;
+  link.click();
+  
+  showToast('Backup berhasil diunduh', 'success');
+}
+
+function importAllData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      Object.keys(data).forEach(key => {
+        if (key === '_meta') return;
+        localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(data[key]));
+      });
+      showToast('Data berhasil dipulihkan', 'success');
+      showSection(currentSection);
+    } catch (err) {
+      showToast('File backup tidak valid', 'error');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function clearAllData() {
+  if (!confirm('PERINGATAN: Semua data lokal akan dihapus permanen. Pastikan sudah backup. Lanjutkan?')) return;
+  Object.keys(localStorage).forEach(key => {
+    if (key.startsWith(STORAGE_PREFIX)) localStorage.removeItem(key);
+  });
+  showToast('Semua data lokal dihapus', 'success');
+  showSection('dashboard');
+}
+
+// Close modal on outside click
+document.getElementById('modal').addEventListener('click', (e) => {
+  if (e.target.id === 'modal') closeModal();
+});
+
+// Keyboard shortcut
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ============= INIT =============
+renderSidebar();
+showSection('dashboard');
+</script>
+</body>
+</html>
