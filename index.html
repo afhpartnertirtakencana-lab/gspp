@@ -1546,16 +1546,19 @@ async function syncToSheets() {
       const response = await fetch(webAppUrl, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'text/plain;charset=utf-8', // WAJIB text/plain untuk bypass CORS preflight di Apps Script
         },
         body: JSON.stringify({ sheet: section.title, rows: data })
       });
+      const resText = await response.text();
+      console.log("Sync " + section.title + ":", resText);
       if (response.ok) {
         success++;
       } else {
         fail++;
       }
     } catch (e) {
+      console.error("Error sync " + section.title + ":", e);
       fail++;
     }
   }
