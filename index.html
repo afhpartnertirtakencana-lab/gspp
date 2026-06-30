@@ -2,46 +2,50 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sistem Administrasi Lingkungan St. Theofilus</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
   :root{
-    --primary:#6b1f2a;
-    --primary-light:#8b2f3a;
-    --primary-dark:#4a1520;
-    --gold:#b8943f;
-    --gold-light:#d4af37;
-    --cream:#faf7f0;
+    --primary:#1e4fa3;
+    --primary-light:#3b6fd4;
+    --primary-dark:#123069;
+    --gold:#f5b700;
+    --gold-light:#ffd84d;
+    --cream:#f5f8fd;
     --ivory:#fffef9;
     --sage:#5a7a5a;
     --charcoal:#1a1a1a;
     --muted:#6b6b6b;
-    --border:#e8e0d4;
+    --border:#dbe6f7;
+    --accent-yellow:#f5b700;
+    --accent-yellow-light:#ffd84d;
+    --accent-blue:#1e4fa3;
+    --accent-blue-light:#eaf1fc;
   }
   *{box-sizing:border-box}
   body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--charcoal);margin:0}
   .font-serif{font-family:'Cormorant Garamond',serif}
   .scrollbar-thin::-webkit-scrollbar{width:6px;height:6px}
   .scrollbar-thin::-webkit-scrollbar-track{background:transparent}
-  .scrollbar-thin::-webkit-scrollbar-thumb{background:rgba(107,31,42,0.3);border-radius:3px}
-  .scrollbar-thin::-webkit-scrollbar-thumb:hover{background:rgba(107,31,42,0.5)}
+  .scrollbar-thin::-webkit-scrollbar-thumb{background:rgba(30,79,163,0.3);border-radius:3px}
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover{background:rgba(30,79,163,0.5)}
   
   .sidebar-link{transition:all .2s ease;position:relative}
-  .sidebar-link:hover{background:rgba(184,148,63,0.1)}
-  .sidebar-link.active{background:linear-gradient(90deg,rgba(107,31,42,0.12),transparent);color:var(--primary)}
+  .sidebar-link:hover{background:rgba(245,183,0,0.1)}
+  .sidebar-link.active{background:linear-gradient(90deg,rgba(30,79,163,0.12),transparent);color:var(--primary)}
   .sidebar-link.active::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;background:var(--gold);border-radius:0 3px 3px 0}
   
-  .card{background:var(--ivory);border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 3px rgba(107,31,42,0.04)}
+  .card{background:var(--ivory);border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 3px rgba(30,79,163,0.04)}
   .card-hover{transition:all .25s ease}
-  .card-hover:hover{box-shadow:0 8px 25px rgba(107,31,42,0.1);transform:translateY(-2px)}
+  .card-hover:hover{box-shadow:0 8px 25px rgba(30,79,163,0.1);transform:translateY(-2px)}
   
   .btn-primary{background:var(--primary);color:white;transition:all .2s}
-  .btn-primary:hover{background:var(--primary-dark);box-shadow:0 4px 12px rgba(107,31,42,0.3)}
+  .btn-primary:hover{background:var(--primary-dark);box-shadow:0 4px 12px rgba(30,79,163,0.3)}
   .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:white;transition:all .2s}
-  .btn-gold:hover{box-shadow:0 4px 12px rgba(184,148,63,0.4)}
+  .btn-gold:hover{box-shadow:0 4px 12px rgba(245,183,0,0.4)}
   .btn-outline{border:1.5px solid var(--border);background:white;color:var(--charcoal);transition:all .2s}
   .btn-outline:hover{border-color:var(--primary);color:var(--primary)}
   
@@ -51,7 +55,7 @@
   table.data-table thead th:last-child{border-radius:0 8px 0 0}
   table.data-table tbody td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:14px}
   table.data-table tbody tr{transition:background .15s}
-  table.data-table tbody tr:hover{background:rgba(184,148,63,0.06)}
+  table.data-table tbody tr:hover{background:rgba(245,183,0,0.06)}
   table.data-table tbody tr:nth-child(even){background:rgba(250,247,240,0.5)}
   
   .modal-overlay{background:rgba(26,26,26,0.5);backdrop-filter:blur(4px)}
@@ -59,7 +63,7 @@
   @keyframes modalIn{from{opacity:0;transform:scale(0.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
   
   .form-input{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;transition:all .15s;background:white;font-family:inherit}
-  .form-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(107,31,42,0.1)}
+  .form-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(30,79,163,0.1)}
   .form-label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
   
   .toast{animation:toastIn .3s ease,toastOut .3s ease 2.7s forwards}
@@ -67,12 +71,12 @@
   @keyframes toastOut{to{transform:translateX(400px);opacity:0}}
   
   .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
-  .badge-gold{background:rgba(184,148,63,0.15);color:#8a6f2f}
+  .badge-gold{background:rgba(245,183,0,0.15);color:#8a6f2f}
   .badge-green{background:rgba(90,122,90,0.15);color:#3d5d3d}
-  .badge-red{background:rgba(107,31,42,0.12);color:var(--primary)}
+  .badge-red{background:rgba(30,79,163,0.12);color:var(--primary)}
   .badge-blue{background:rgba(59,130,246,0.12);color:#1e40af}
   
-  .kop-surat{border-bottom:3px double var(--primary);padding-bottom:12px;margin-bottom:8px}
+  .kop-surat{border-bottom:3px double var(--primary);padding-bottom:14px;margin-bottom:10px}
   
   @media print{
     .no-print{display:none !important}
@@ -98,164 +102,16 @@
   .letter-preview{font-family:'Times New Roman',serif;line-height:1.8;font-size:13px}
   
   .icon-wrap{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-
-  /* ===== HAMBURGER BUTTON (mobile only) ===== */
-  .hamburger-btn{display:none}
-  .sidebar-overlay{display:none}
-
-  /* ===== TABLET RESPONSIVE ===== */
-  @media (max-width:1024px){
-    .sidebar{width:260px}
-    .modal-content{max-width:90%}
-  }
-
-  /* ===== MOBILE & TABLET OFF-CANVAS SIDEBAR ===== */
-  @media (max-width:768px){
-    .sidebar{
-      position:fixed;
-      top:0;left:0;bottom:0;
-      z-index:50;
-      transform:translateX(-100%);
-      transition:transform .3s ease;
-      box-shadow:2px 0 20px rgba(0,0,0,0.15);
-    }
-    .sidebar.open{transform:translateX(0)}
-    .sidebar-overlay{
-      display:none;
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,0.4);
-      z-index:40;
-      backdrop-filter:blur(2px);
-    }
-    .sidebar-overlay.show{display:block}
-    .hamburger-btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width:40px;height:40px;
-      border-radius:8px;
-      border:1.5px solid var(--border);
-      background:white;
-      color:var(--primary);
-      cursor:pointer;
-      flex-shrink:0;
-    }
-    .hamburger-btn:hover{background:var(--cream)}
-  }
-
-  /* ===== MOBILE SPECIFIC ===== */
-  @media (max-width:640px){
-    .header-actions{gap:6px}
-    .header-btn-text{display:none}
-    .header-btn{padding:8px 10px !important;font-size:13px}
-    .header-title{font-size:18px !important}
-    .header-subtitle{font-size:11px}
-    
-    .main-content-padding{padding:12px !important}
-    .card-padding{padding:14px !important}
-    
-    .stat-card{padding:14px !important}
-    .stat-card .font-serif{font-size:24px !important}
-    .stat-icon-wrap{width:32px;height:32px;font-size:14px}
-    
-    .table-toolbar{flex-direction:column;align-items:stretch !important;gap:8px !important}
-    .table-toolbar > div{width:100%}
-    .search-input-wrap{max-width:100% !important}
-    .table-actions{display:flex;gap:6px}
-    .table-actions button{flex:1;padding:8px 6px !important;font-size:12px}
-    .table-actions button i{margin:0 !important}
-    .table-actions button span{display:none}
-    
-    table.data-table thead th{padding:8px 10px;font-size:10px}
-    table.data-table tbody td{padding:8px 10px;font-size:12px}
-    
-    .modal-content{max-width:95% !important;max-height:95vh !important;border-radius:12px}
-    .modal-header{padding:14px !important}
-    .modal-title{font-size:16px !important}
-    .modal-body{padding:14px !important}
-    .modal-footer{padding:12px !important;flex-direction:column-reverse;gap:8px}
-    .modal-footer button{width:100%}
-    
-    .modal-fields{grid-template-columns:1fr !important;gap:10px}
-    
-    .hero-padding{padding:16px !important}
-    .hero-title{font-size:22px !important;line-height:1.2}
-    .hero-text{font-size:12px !important}
-    .hero-stats{gap:10px !important;font-size:10px !important}
-    .hero-logo{width:60px !important;height:60px !important}
-    
-    .quick-access-grid{grid-template-columns:1fr !important;gap:8px}
-    .quick-access-btn{padding:10px !important;font-size:12px}
-    
-    .category-grid{grid-template-columns:1fr !important}
-    
-    .letter-layout{grid-template-columns:1fr !important;gap:12px}
-    .letter-form-card{padding:14px !important}
-    .letter-preview{padding:16px !important;min-height:400px !important;font-size:11px}
-    .letter-preview .kop-surat{gap:8px !important}
-    .letter-preview .kop-surat > div:first-child,
-    .letter-preview .kop-surat > div:last-child{width:50px !important;height:50px !important}
-    .letter-preview .kop-surat > div:nth-child(2){font-size:10px !important}
-    .letter-preview .kop-surat > div:nth-child(2) > div:first-child{font-size:10px !important}
-    .letter-preview .kop-surat > div:nth-child(2) > div:nth-child(2){font-size:11px !important}
-    .letter-preview .kop-surat > div:nth-child(2) > div:nth-child(3){font-size:10px !important}
-    
-    .settings-grid{grid-template-columns:1fr !important}
-    .settings-card{padding:14px !important}
-    
-    .toast{font-size:12px;padding:10px 14px;max-width:calc(100vw - 24px)}
-    
-    .stat-grid{grid-template-columns:repeat(2,1fr) !important;gap:10px}
-    
-    .page-title{font-size:18px !important}
-    .page-subtitle{font-size:11px}
-    
-    .sidebar-footer{padding:10px !important}
-    .sidebar-footer .text-xs{font-size:10px}
-    
-    .data-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-    
-    .record-count{font-size:11px}
-    
-    .empty-state-icon{font-size:36px !important}
-    .empty-state-text{font-size:13px !important}
-  }
-
-  /* ===== TOUCH OPTIMIZATION ===== */
-  @media (hover:none) and (pointer:coarse){
-    .sidebar-link{padding:14px 20px}
-    .sidebar-link i{font-size:14px}
-    .btn-primary,.btn-gold,.btn-outline{padding:10px 16px}
-    .card-hover:hover{transform:none;box-shadow:0 1px 3px rgba(107,31,42,0.04)}
-    table.data-table tbody tr:hover{background:transparent}
-  }
-
-  /* ===== SCROLLBAR HIDE ON MOBILE ===== */
-  @media (max-width:640px){
-    .scrollbar-thin::-webkit-scrollbar{width:3px;height:3px}
-  }
-
-  /* ===== SAFE AREA FOR NOTCH ===== */
-  @supports (padding:max(0px)){
-    @media (max-width:768px){
-      .header-bar{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
-      .sidebar{padding-top:env(safe-area-inset-top)}
-    }
-  }
 </style>
 </head>
 <body class="flex h-screen overflow-hidden">
 
-<!-- SIDEBAR OVERLAY (mobile) -->
-<div id="sidebarOverlay" class="sidebar-overlay no-print" onclick="closeSidebar()"></div>
-
 <!-- SIDEBAR -->
-<aside id="sidebar" class="no-print sidebar w-72 bg-white border-r flex flex-col" style="border-color:var(--border)">
+<aside class="no-print w-72 bg-white border-r flex flex-col" style="border-color:var(--border)">
   <div class="px-5 py-5 border-b" style="border-color:var(--border);background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
     <div class="flex items-center gap-3">
-      <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center p-1.5 flex-shrink-0">
-        <img src="https://z-cdn.media.chatglm.cn/files/9f93308d-152e-4da7-b704-e5fec50b47d5.png" alt="Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" class="w-full h-full object-contain">
+      <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center p-1 flex-shrink-0 shadow-md ring-2 ring-white/30 overflow-hidden">
+        <img src="https://z-cdn.media.chatglm.cn/files/9f93308d-152e-4da7-b704-e5fec50b47d5.png" alt="Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" class="w-full h-full object-contain app-logo-img">
         <div class="hidden w-full h-full items-center justify-center" style="display:none">
           <i class="fas fa-church text-2xl" style="color:var(--primary)"></i>
         </div>
@@ -264,17 +120,13 @@
         <h1 class="font-serif text-lg font-bold leading-tight">St. Theofilus</h1>
         <p class="text-xs opacity-80 leading-tight">Taman Sari 8/9</p>
       </div>
-      <!-- Close button on mobile -->
-      <button onclick="closeSidebar()" class="md:hidden text-white/70 hover:text-white ml-auto p-2" aria-label="Tutup menu">
-        <i class="fas fa-times text-lg"></i>
-      </button>
     </div>
     <p class="text-xs text-white/60 mt-3 leading-relaxed">Sistem Administrasi<br>Lingkungan Gereja Katolik</p>
   </div>
   
   <nav class="flex-1 overflow-y-auto scrollbar-thin py-2" id="sidebarNav"></nav>
   
-  <div class="sidebar-footer px-4 py-3 border-t" style="border-color:var(--border);background:var(--cream)">
+  <div class="px-4 py-3 border-t" style="border-color:var(--border);background:var(--cream)">
     <div class="text-xs text-gray-500 mb-1">Google Sheets ID</div>
     <div class="text-xs font-mono font-semibold break-all" style="color:var(--primary)">1bz-8jeYjaEFsVbT8Yf4bLjW3pR5ddW_VUdxG2viSi5k</div>
     <button onclick="window.open('https://docs.google.com/spreadsheets/d/1bz-8jeYjaEFsVbT8Yf4bLjW3pR5ddW_VUdxG2viSi5k/edit','_blank')" class="mt-2 text-xs btn-outline px-3 py-1.5 rounded-md w-full">
@@ -286,22 +138,17 @@
 <!-- MAIN -->
 <main class="flex-1 flex flex-col overflow-hidden">
   <!-- HEADER -->
-  <header class="header-bar no-print bg-white border-b px-4 md:px-6 py-3 flex items-center justify-between" style="border-color:var(--border)">
-    <div class="flex items-center gap-3 min-w-0 flex-1">
-      <button onclick="openSidebar()" class="hamburger-btn" aria-label="Buka menu">
-        <i class="fas fa-bars text-lg"></i>
-      </button>
-      <div class="min-w-0">
-        <h2 id="pageTitle" class="page-title font-serif text-xl md:text-2xl font-bold truncate" style="color:var(--primary)">Dashboard</h2>
-        <p id="pageSubtitle" class="page-subtitle text-xs text-gray-500 truncate">Lingkungan Taman Sari 8/9 St. Theofilus</p>
-      </div>
+  <header class="no-print bg-white border-b px-6 py-3 flex items-center justify-between" style="border-color:var(--border)">
+    <div>
+      <h2 id="pageTitle" class="font-serif text-2xl font-bold" style="color:var(--primary)">Dashboard</h2>
+      <p id="pageSubtitle" class="text-xs text-gray-500">Lingkungan Taman Sari 8/9 St. Theofilus</p>
     </div>
-    <div class="header-actions flex items-center gap-2 md:gap-3 flex-shrink-0">
-      <button onclick="exportAllData()" class="header-btn btn-outline px-3 md:px-4 py-2 rounded-lg text-sm font-medium">
-        <i class="fas fa-download md:mr-1.5"></i><span class="header-btn-text">Backup Data</span>
+    <div class="flex items-center gap-3">
+      <button onclick="exportAllData()" class="btn-outline px-4 py-2 rounded-lg text-sm font-medium">
+        <i class="fas fa-download mr-1.5"></i>Backup Data
       </button>
-      <label class="header-btn btn-outline px-3 md:px-4 py-2 rounded-lg text-sm font-medium cursor-pointer">
-        <i class="fas fa-upload md:mr-1.5"></i><span class="header-btn-text">Restore</span>
+      <label class="btn-outline px-4 py-2 rounded-lg text-sm font-medium cursor-pointer">
+        <i class="fas fa-upload mr-1.5"></i>Restore
         <input type="file" accept=".json" onchange="importAllData(event)" class="hidden">
       </label>
     </div>
@@ -316,16 +163,16 @@
 <!-- MODAL -->
 <div id="modal" class="no-print fixed inset-0 z-50 hidden items-center justify-center modal-overlay p-4">
   <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
-    <div class="modal-header px-6 py-4 border-b flex items-center justify-between" style="border-color:var(--border);background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
-      <h3 id="modalTitle" class="modal-title font-serif text-xl font-bold text-white">Tambah Data</h3>
-      <button onclick="closeModal()" class="text-white/70 hover:text-white text-xl p-1" aria-label="Tutup">
+    <div class="px-6 py-4 border-b flex items-center justify-between" style="border-color:var(--border);background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
+      <h3 id="modalTitle" class="font-serif text-xl font-bold text-white">Tambah Data</h3>
+      <button onclick="closeModal()" class="text-white/70 hover:text-white text-xl">
         <i class="fas fa-times"></i>
       </button>
     </div>
-    <form id="modalForm" onsubmit="saveData(event)" class="flex-1 overflow-y-auto scrollbar-thin p-6 modal-body">
+    <form id="modalForm" onsubmit="saveData(event)" class="flex-1 overflow-y-auto scrollbar-thin p-6">
       <div id="modalFields" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
     </form>
-    <div class="modal-footer px-6 py-4 border-t flex justify-end gap-3" style="border-color:var(--border);background:var(--cream)">
+    <div class="px-6 py-4 border-t flex justify-end gap-3" style="border-color:var(--border);background:var(--cream)">
       <button onclick="closeModal()" class="btn-outline px-5 py-2 rounded-lg text-sm font-medium">Batal</button>
       <button onclick="document.getElementById('modalForm').requestSubmit()" class="btn-primary px-5 py-2 rounded-lg text-sm font-medium">
         <i class="fas fa-save mr-1.5"></i>Simpan
@@ -640,6 +487,7 @@ function saveDataToStorage(sectionId, data) {
 }
 
 function getDefaultData(sectionId) {
+  // Pre-fill some sections with initial data
   if (sectionId === 'profil_lingkungan') return [
     {data:'Nama Lingkungan', keterangan:'Taman Sari 8/9 St. Theofilus'},
     {data:'Pelindung', keterangan:'St. Theofilus'},
@@ -675,6 +523,7 @@ function renderSidebar() {
   const nav = document.getElementById('sidebarNav');
   nav.innerHTML = '';
   
+  // Dashboard link
   const dashLink = document.createElement('a');
   dashLink.href = '#';
   dashLink.className = 'sidebar-link flex items-center gap-3 px-5 py-2.5 text-sm font-medium';
@@ -701,6 +550,7 @@ function renderSidebar() {
     nav.appendChild(catDiv);
   });
   
+  // Settings link
   const settingsDiv = document.createElement('div');
   settingsDiv.innerHTML = `
     <div class="category-header">Pengaturan</div>
@@ -715,6 +565,7 @@ function renderSidebar() {
 function showSection(sectionId) {
   currentSection = sectionId;
   
+  // Update active sidebar
   document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
   const activeLink = document.querySelector(`[data-section="${sectionId}"]`);
   if (activeLink) activeLink.classList.add('active');
@@ -730,6 +581,7 @@ function showSection(sectionId) {
     renderSettings(content);
     document.getElementById('pageTitle').textContent = 'Pengaturan';
     document.getElementById('pageSubtitle').textContent = 'Sinkronisasi & Backup Data';
+    updateAutoSyncStatus();
   } else if (ALL_SECTIONS[sectionId]) {
     const section = ALL_SECTIONS[sectionId];
     document.getElementById('pageTitle').textContent = section.title;
@@ -741,11 +593,7 @@ function showSection(sectionId) {
       renderTableSection(content, section);
     }
   }
-  
-  // Auto close sidebar on mobile after selection
-  if (window.innerWidth <= 768) {
-    closeSidebar();
-  }
+  applyCustomLogo();
 }
 
 // ============= DASHBOARD =============
@@ -768,58 +616,58 @@ function renderDashboard(container) {
   ];
   
   const html = `
-    <div class="p-4 md:p-6 main-content-padding fade-in">
+    <div class="p-6 fade-in">
       <!-- Hero -->
-      <div class="card p-4 md:p-6 mb-4 md:mb-6 hero-padding" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border:none">
-        <div class="flex items-start justify-between gap-3">
-          <div class="flex-1 min-w-0">
-            <p class="text-xs md:text-sm opacity-80 mb-1">Selamat Datang di Sistem Administrasi</p>
-            <h2 class="hero-title font-serif text-2xl md:text-3xl font-bold mb-2">Lingkungan Taman Sari 8/9<br>St. Theofilus</h2>
-            <p class="hero-text text-xs md:text-sm opacity-90 max-w-2xl">${CONFIG.paroki} &mdash; ${CONFIG.keuskupan}</p>
-            <div class="hero-stats flex flex-wrap gap-3 md:gap-4 mt-3 md:mt-4 text-xs opacity-90">
-              <span class="flex items-center gap-1.5"><i class="fas fa-user-tie"></i> ${CONFIG.ketua}</span>
-              <span class="flex items-center gap-1.5"><i class="fas fa-cross"></i> ${CONFIG.pastor}</span>
+      <div class="card p-6 mb-6" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border:none">
+        <div class="flex items-start justify-between">
+          <div class="flex-1">
+            <p class="text-sm opacity-80 mb-1">Selamat Datang di Sistem Administrasi</p>
+            <h2 class="font-serif text-3xl font-bold mb-2">Lingkungan Taman Sari 8/9<br>St. Theofilus</h2>
+            <p class="text-sm opacity-90 max-w-2xl">${CONFIG.paroki} &mdash; ${CONFIG.keuskupan}</p>
+            <div class="flex flex-wrap gap-4 mt-4 text-xs opacity-90">
+              <span><i class="fas fa-user-tie mr-1.5"></i> Ketua: ${CONFIG.ketua}</span>
+              <span><i class="fas fa-cross mr-1.5"></i> Pastor: ${CONFIG.pastor}</span>
             </div>
           </div>
-          <div class="hidden md:block flex-shrink-0">
-            <div class="hero-logo w-24 h-24 rounded-full bg-white/10 flex items-center justify-center p-3">
-              <img src="${CONFIG.logoUrl}" alt="Logo" onerror="this.style.display='none'" class="w-full h-full object-contain">
+          <div class="hidden md:block">
+            <div class="w-24 h-24 rounded-full bg-white flex items-center justify-center p-2.5 shadow-lg ring-2 ring-white/40 overflow-hidden">
+              <img src="${CONFIG.logoUrl}" alt="Logo" onerror="this.style.display='none'" class="w-full h-full object-contain app-logo-img">
             </div>
           </div>
         </div>
       </div>
       
       <!-- Stats -->
-      <div class="stat-grid grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         ${stats.map(s => `
-          <div class="card stat-card ${s.color} p-4 md:p-5 card-hover">
-            <div class="icon-wrap stat-icon-wrap mb-2 md:mb-3" style="background:rgba(107,31,42,0.08)">
+          <div class="card stat-card ${s.color} p-5 card-hover">
+            <div class="icon-wrap mb-3" style="background:rgba(30,79,163,0.08)">
               <i class="fas ${s.icon}" style="color:var(--primary)"></i>
             </div>
-            <div class="font-serif text-2xl md:text-3xl font-bold" style="color:var(--primary)">${s.value}</div>
+            <div class="font-serif text-3xl font-bold" style="color:var(--primary)">${s.value}</div>
             <div class="text-xs text-gray-500 mt-1">${s.label}</div>
           </div>
         `).join('')}
       </div>
       
       <!-- Quick Access -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
-        <div class="card p-4 md:p-5 card-padding">
-          <h3 class="font-serif text-lg md:text-xl font-bold mb-3 md:mb-4" style="color:var(--primary)">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="card p-5">
+          <h3 class="font-serif text-lg font-bold mb-4" style="color:var(--primary)">
             <i class="fas fa-bolt mr-2" style="color:var(--gold)"></i>Akses Cepat
           </h3>
-          <div class="quick-access-grid grid grid-cols-2 gap-2">
+          <div class="grid grid-cols-2 gap-2">
             ${['kk','umat','struktur','kas_umum','tpl_undangan','tpl_keterangan'].map(id => {
               const s = ALL_SECTIONS[id];
-              return `<button onclick="showSection('${id}')" class="quick-access-btn btn-outline p-3 rounded-lg text-left text-sm font-medium">
+              return `<button onclick="showSection('${id}')" class="btn-outline p-3 rounded-lg text-left text-sm font-medium">
                 <i class="fas ${s.icon} mr-2" style="color:var(--gold)"></i>${s.title}
               </button>`;
             }).join('')}
           </div>
         </div>
         
-        <div class="card p-4 md:p-5 card-padding">
-          <h3 class="font-serif text-lg md:text-xl font-bold mb-3 md:mb-4" style="color:var(--primary)">
+        <div class="card p-5">
+          <h3 class="font-serif text-lg font-bold mb-4" style="color:var(--primary)">
             <i class="fas fa-chart-pie mr-2" style="color:var(--gold)"></i>Status Pengisian Data
           </h3>
           <div class="space-y-2 max-h-64 overflow-y-auto scrollbar-thin">
@@ -829,8 +677,8 @@ function renderDashboard(container) {
                 ${cat.items.map(item => {
                   const count = loadData(item.id).length;
                   return `<div class="flex items-center justify-between text-sm py-1">
-                    <span class="${count>0?'text-gray-700':'text-gray-400'} truncate pr-2">${item.title}</span>
-                    <span class="badge ${count>0?'badge-green':'badge-red'} flex-shrink-0">${count} data</span>
+                    <span class="${count>0?'text-gray-700':'text-gray-400'}">${item.title}</span>
+                    <span class="badge ${count>0?'badge-green':'badge-red'}">${count} data</span>
                   </div>`;
                 }).join('')}
               </div>
@@ -840,15 +688,15 @@ function renderDashboard(container) {
       </div>
       
       <!-- Categories Grid -->
-      <div class="card p-4 md:p-5 card-padding">
-        <h3 class="font-serif text-lg md:text-xl font-bold mb-3 md:mb-4" style="color:var(--primary)">
+      <div class="card p-5">
+        <h3 class="font-serif text-lg font-bold mb-4" style="color:var(--primary)">
           <i class="fas fa-folder-tree mr-2" style="color:var(--gold)"></i>Kategori Administrasi
         </h3>
-        <div class="category-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           ${CATEGORIES.filter(c=>c.items.length>0).map(cat => `
             <div class="border rounded-lg p-4 card-hover" style="border-color:var(--border)">
               <div class="flex items-center gap-3 mb-3">
-                <div class="icon-wrap" style="background:rgba(184,148,63,0.12)">
+                <div class="icon-wrap" style="background:rgba(245,183,0,0.12)">
                   <i class="fas ${cat.icon}" style="color:var(--gold)"></i>
                 </div>
                 <h4 class="font-semibold text-sm" style="color:var(--primary)">${cat.title}</h4>
@@ -874,37 +722,43 @@ function renderTableSection(container, section) {
   const data = loadData(section.id);
   
   const html = `
-    <div class="p-4 md:p-6 main-content-padding fade-in">
-      <div class="card p-4 md:p-5 card-padding">
+    <div class="p-6 fade-in">
+      <div class="card p-5">
         <!-- Toolbar -->
-        <div class="table-toolbar flex flex-wrap items-center justify-between gap-3 mb-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div class="flex items-center gap-3 flex-1 min-w-[200px]">
-            <div class="relative flex-1 max-w-xs search-input-wrap">
+            <div class="relative flex-1 max-w-xs">
               <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
               <input type="text" id="searchInput" placeholder="Cari data..." 
                 class="form-input pl-9" oninput="filterTable('${section.id}', this.value)">
             </div>
-            <span class="record-count text-sm text-gray-500 whitespace-nowrap">${data.length} record</span>
+            <span class="text-sm text-gray-500">${data.length} record</span>
           </div>
-          <div class="table-actions flex items-center gap-2">
-            <button onclick="exportCSV('${section.id}')" class="btn-outline header-btn px-3 md:px-4 py-2 rounded-lg text-sm font-medium">
-              <i class="fas fa-file-csv md:mr-1.5"></i><span class="header-btn-text">CSV</span>
+          <div class="flex items-center gap-2">
+            <button onclick="syncSectionPull('${section.id}')" class="btn-outline px-4 py-2 rounded-lg text-sm font-medium" title="Ambil data terbaru dari Google Sheets">
+              <i class="fas fa-cloud-arrow-down mr-1.5"></i>Tarik
             </button>
-            <button onclick="printSection('${section.id}')" class="btn-outline header-btn px-3 md:px-4 py-2 rounded-lg text-sm font-medium">
-              <i class="fas fa-print md:mr-1.5"></i><span class="header-btn-text">Print</span>
+            <button onclick="syncSectionPush('${section.id}')" class="btn-gold px-4 py-2 rounded-lg text-sm font-medium" title="Kirim data menu ini ke Google Sheets">
+              <i class="fas fa-cloud-arrow-up mr-1.5"></i>Sync
             </button>
-            <button onclick="openModal('${section.id}')" class="btn-primary header-btn px-3 md:px-4 py-2 rounded-lg text-sm font-medium">
-              <i class="fas fa-plus md:mr-1.5"></i><span class="header-btn-text">Tambah</span>
+            <button onclick="exportCSV('${section.id}')" class="btn-outline px-4 py-2 rounded-lg text-sm font-medium">
+              <i class="fas fa-file-csv mr-1.5"></i>CSV
+            </button>
+            <button onclick="printSection('${section.id}')" class="btn-outline px-4 py-2 rounded-lg text-sm font-medium">
+              <i class="fas fa-print mr-1.5"></i>Print
+            </button>
+            <button onclick="openModal('${section.id}')" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">
+              <i class="fas fa-plus mr-1.5"></i>Tambah
             </button>
           </div>
         </div>
         
         <!-- Table -->
-        <div class="data-table-wrap overflow-x-auto scrollbar-thin">
+        <div class="overflow-x-auto scrollbar-thin">
           ${data.length === 0 ? `
-            <div class="text-center py-12 md:py-16">
-              <i class="fas fa-inbox empty-state-icon text-5xl text-gray-300 mb-3"></i>
-              <p class="empty-state-text text-gray-400">Belum ada data. Klik "Tambah" untuk menambahkan.</p>
+            <div class="text-center py-16">
+              <i class="fas fa-inbox text-5xl text-gray-300 mb-3"></i>
+              <p class="text-gray-400">Belum ada data. Klik "Tambah" untuk menambahkan.</p>
             </div>
           ` : `
             <table class="data-table" id="dataTable">
@@ -925,11 +779,11 @@ function renderTableSection(container, section) {
                       if (f.type === 'textarea') val = val.length > 60 ? val.substring(0,60)+'...' : val;
                       return `<td>${escapeHtml(val)}</td>`;
                     }).join('')}
-                    <td class="text-center whitespace-nowrap">
-                      <button onclick="openModal('${section.id}','${row._id}')" class="text-blue-600 hover:text-blue-800 mx-1 px-1" title="Edit">
+                    <td class="text-center">
+                      <button onclick="openModal('${section.id}','${row._id}')" class="text-blue-600 hover:text-blue-800 mx-1" title="Edit">
                         <i class="fas fa-pen-to-square"></i>
                       </button>
-                      <button onclick="deleteRow('${section.id}','${row._id}')" class="text-red-600 hover:text-red-800 mx-1 px-1" title="Hapus">
+                      <button onclick="deleteRow('${section.id}','${row._id}')" class="text-red-600 hover:text-red-800 mx-1" title="Hapus">
                         <i class="fas fa-trash"></i>
                       </button>
                     </td>
@@ -1047,15 +901,25 @@ function renderLetterTemplate(container, section) {
   const data = loadData(section.id);
   
   const html = `
-    <div class="p-4 md:p-6 main-content-padding fade-in">
-      <div class="letter-layout grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+    <div class="p-6 fade-in">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Form -->
-        <div class="card p-4 md:p-5 letter-form-card no-print card-padding">
-          <h3 class="font-serif text-lg md:text-xl font-bold mb-3 md:mb-4" style="color:var(--primary)">
-            <i class="fas fa-pen mr-2" style="color:var(--gold)"></i>Isi Data Surat
-          </h3>
+        <div class="card p-5 no-print">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-serif text-lg font-bold" style="color:var(--primary)">
+              <i class="fas fa-pen mr-2" style="color:var(--gold)"></i>Isi Data Surat
+            </h3>
+            <div class="flex items-center gap-2">
+              <button onclick="syncSectionPull('${section.id}')" class="btn-outline px-3 py-1.5 rounded-lg text-xs font-medium" title="Ambil dari Google Sheets">
+                <i class="fas fa-cloud-arrow-down"></i>
+              </button>
+              <button onclick="syncSectionPush('${section.id}')" class="btn-gold px-3 py-1.5 rounded-lg text-xs font-medium" title="Kirim ke Google Sheets">
+                <i class="fas fa-cloud-arrow-up"></i>
+              </button>
+            </div>
+          </div>
           <div id="letterForm" class="space-y-3"></div>
-          <div class="flex flex-col sm:flex-row gap-2 mt-4">
+          <div class="flex gap-2 mt-4">
             <button onclick="saveLetter('${section.id}','${section.letterType}')" class="btn-primary px-4 py-2 rounded-lg text-sm flex-1">
               <i class="fas fa-save mr-1.5"></i>Simpan & Preview
             </button>
@@ -1064,15 +928,15 @@ function renderLetterTemplate(container, section) {
             </button>
           </div>
           
-          <div class="mt-4 md:mt-6 pt-4 border-t" style="border-color:var(--border)">
+          <div class="mt-6 pt-4 border-t" style="border-color:var(--border)">
             <h4 class="text-sm font-bold mb-2" style="color:var(--primary)">Surat Tersimpan</h4>
             <div class="space-y-1 max-h-40 overflow-y-auto scrollbar-thin">
               ${data.length === 0 ? '<p class="text-xs text-gray-400">Belum ada surat tersimpan</p>' : 
                 data.map(s => `
-                  <div class="flex items-center justify-between text-xs p-2 rounded hover:bg-gray-50 gap-2">
-                    <span class="truncate flex-1 min-w-0">${s.perihal || s.nama || s.tujuan || 'Surat'}</span>
-                    <button onclick="loadLetter('${section.id}','${s._id}','${section.letterType}')" class="text-blue-600 flex-shrink-0"><i class="fas fa-edit"></i></button>
-                    <button onclick="deleteRow('${section.id}','${s._id}')" class="text-red-600 flex-shrink-0"><i class="fas fa-trash"></i></button>
+                  <div class="flex items-center justify-between text-xs p-2 rounded hover:bg-gray-50">
+                    <span class="truncate flex-1">${s.perihal || s.nama || s.tujuan || 'Surat'}</span>
+                    <button onclick="loadLetter('${section.id}','${s._id}','${section.letterType}')" class="text-blue-600 mx-1"><i class="fas fa-edit"></i></button>
+                    <button onclick="deleteRow('${section.id}','${s._id}')" class="text-red-600 mx-1"><i class="fas fa-trash"></i></button>
                   </div>
                 `).join('')
               }
@@ -1085,13 +949,14 @@ function renderLetterTemplate(container, section) {
           <div class="bg-gray-100 px-4 py-2 border-b no-print" style="border-color:var(--border)">
             <span class="text-xs font-semibold text-gray-500"><i class="fas fa-eye mr-1"></i>PREVIEW SURAT</span>
           </div>
-          <div id="letterPreview" class="p-4 md:p-8 bg-white letter-preview" style="min-height:500px"></div>
+          <div id="letterPreview" class="p-8 bg-white letter-preview" style="min-height:600px"></div>
         </div>
       </div>
     </div>
   `;
   container.innerHTML = html;
   
+  // Render form based on letter type
   renderLetterForm(section.letterType);
   updateLetterPreview(section.letterType);
 }
@@ -1154,23 +1019,23 @@ function getLetterFormData() {
 
 function generateKopSurat() {
   return `
-    <div class="kop-surat" style="display:flex;align-items:flex-start;gap:15px">
-      <div style="width:80px;height:80px;flex-shrink:0">
-        <img src="${CONFIG.logoUrl}" alt="Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" style="width:100%;height:100%;object-fit:contain">
-        <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;border:2px solid #6b1f2a;border-radius:50%">
-          <span style="font-size:24px;font-weight:bold;color:#6b1f2a">P&P</span>
+    <div class="kop-surat" style="display:flex;align-items:center;gap:18px;padding-bottom:14px">
+      <div style="width:78px;height:78px;flex-shrink:0;display:flex;align-items:center;justify-content:center">
+        <img src="${CONFIG.logoUrl}" alt="Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" style="width:100%;height:100%;object-fit:contain" class="app-logo-img">
+        <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;border:2px solid #1e4fa3;border-radius:50%">
+          <span style="font-size:24px;font-weight:bold;color:#1e4fa3">P&P</span>
         </div>
       </div>
-      <div style="flex:1;text-align:center">
-        <div style="font-size:13px;font-weight:bold">${CONFIG.keuskupan}</div>
-        <div style="font-size:15px;font-weight:bold">${CONFIG.paroki}</div>
-        <div style="font-size:13px;font-weight:bold">${CONFIG.lingkungan}</div>
-        <div style="font-size:10px;margin-top:3px;color:#555">
+      <div style="flex:1;text-align:center;line-height:1.35">
+        <div style="font-size:12.5px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase">${CONFIG.keuskupan}</div>
+        <div style="font-size:16px;font-weight:700;letter-spacing:0.3px;margin-top:2px">${CONFIG.paroki}</div>
+        <div style="font-size:13px;font-weight:600;margin-top:1px">${CONFIG.lingkungan}</div>
+        <div style="font-size:10px;margin-top:5px;color:#555">
           ${CONFIG.alamat} &bull; Telp. ${CONFIG.telp}<br>
           Email: ${CONFIG.email}
         </div>
       </div>
-      <div style="width:80px;flex-shrink:0"></div>
+      <div style="width:78px;flex-shrink:0"></div>
     </div>
   `;
 }
@@ -1262,6 +1127,7 @@ function saveLetter(sectionId, type) {
   const data = getLetterFormData();
   const existing = loadData(sectionId);
   
+  // Check if editing
   const editingLetter = document.getElementById('letterForm').dataset.editingId;
   
   if (editingLetter) {
@@ -1280,6 +1146,7 @@ function saveLetter(sectionId, type) {
   updateLetterPreview(type);
   showToast('Surat berhasil disimpan', 'success');
   
+  // Refresh to show saved list
   const section = ALL_SECTIONS[sectionId];
   renderLetterTemplate(document.getElementById('mainContent'), section);
 }
@@ -1289,6 +1156,7 @@ function loadLetter(sectionId, letterId, type) {
   const letter = data.find(r => r._id === letterId);
   if (!letter) return;
   
+  // Populate form
   Object.keys(letter).forEach(key => {
     if (key === '_id') return;
     const input = document.querySelector(`#letterForm [name="${key}"]`);
@@ -1384,25 +1252,50 @@ function printSection(sectionId) {
 
 // ============= SETTINGS =============
 function renderSettings(container) {
+  const customLogo = localStorage.getItem('customLogoUrl');
   const html = `
-    <div class="p-4 md:p-6 main-content-padding fade-in max-w-4xl">
+    <div class="p-6 fade-in max-w-4xl">
+      <!-- Logo Pengaturan -->
+      <div class="card p-6 mb-6">
+        <h3 class="font-serif text-xl font-bold mb-4" style="color:var(--primary)">
+          <i class="fas fa-image mr-2" style="color:var(--gold)"></i>Pengaturan Logo
+        </h3>
+        <div class="flex flex-col sm:flex-row items-center gap-5">
+          <div class="w-24 h-24 rounded-full bg-white border flex items-center justify-center p-2.5 flex-shrink-0 shadow-sm overflow-hidden" style="border-color:var(--border)">
+            <img id="logoPreview" src="${customLogo || CONFIG.logoUrl}" alt="Logo Preview" class="w-full h-full object-contain">
+          </div>
+          <div class="flex-1 w-full">
+            <p class="text-sm text-gray-600 mb-3">Unggah logo untuk mengganti logo pada sidebar, dashboard, dan kop surat. Format gambar (PNG/JPG), disimpan di perangkat ini.</p>
+            <div class="flex flex-wrap gap-2">
+              <label class="btn-primary px-5 py-2 rounded-lg text-sm cursor-pointer">
+                <i class="fas fa-upload mr-1.5"></i>Upload Logo Baru
+                <input type="file" accept="image/*" onchange="handleLogoUpload(event)" class="hidden">
+              </label>
+              <button onclick="resetLogo()" class="btn-outline px-5 py-2 rounded-lg text-sm">
+                <i class="fas fa-rotate-left mr-1.5"></i>Kembalikan Default
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <!-- Google Sheets Integration -->
-      <div class="card settings-card p-4 md:p-6 mb-4 md:mb-6 card-padding">
-        <h3 class="font-serif text-lg md:text-xl font-bold mb-3 md:mb-4" style="color:var(--primary)">
+      <div class="card p-6 mb-6">
+        <h3 class="font-serif text-xl font-bold mb-4" style="color:var(--primary)">
           <i class="fas fa-cloud mr-2" style="color:var(--gold)"></i>Integrasi Google Sheets
         </h3>
-        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 md:p-4 mb-4">
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
           <div class="flex items-start gap-3">
-            <i class="fas fa-info-circle text-blue-600 text-lg mt-0.5 flex-shrink-0"></i>
+            <i class="fas fa-info-circle text-blue-600 text-lg mt-0.5"></i>
             <div class="text-sm text-blue-900">
               <p class="font-semibold mb-1">Informasi Google Sheets</p>
-              <p>Google Sheet ID: <code class="bg-white px-2 py-0.5 rounded text-xs break-all">${CONFIG.sheetId}</code></p>
+              <p>Google Sheet ID: <code class="bg-white px-2 py-0.5 rounded text-xs">${CONFIG.sheetId}</code></p>
               <p class="mt-1">Data tersimpan secara lokal di browser (localStorage). Untuk sinkronisasi otomatis dengan Google Sheets, deploy Google Apps Script di bawah ini sebagai Web App.</p>
             </div>
           </div>
         </div>
         
-        <div class="flex flex-col sm:flex-row gap-2 md:gap-3 mb-4">
+        <div class="flex gap-3 mb-4">
           <button onclick="window.open('https://docs.google.com/spreadsheets/d/${CONFIG.sheetId}/edit','_blank')" class="btn-primary px-4 py-2 rounded-lg text-sm">
             <i class="fas fa-external-link-alt mr-1.5"></i>Buka Google Sheets
           </button>
@@ -1411,59 +1304,50 @@ function renderSettings(container) {
           </button>
         </div>
         
+        <div class="flex items-center justify-between border rounded-lg p-3 mb-4" style="border-color:var(--border);background:var(--accent-blue-light)">
+          <div>
+            <label class="flex items-center gap-2 text-sm font-semibold cursor-pointer" style="color:var(--primary)">
+              <input type="checkbox" id="autoSyncToggle" onchange="toggleAutoSync(this)" ${localStorage.getItem('autoSyncEnabled') !== 'false' ? 'checked' : ''}>
+              <i class="fas fa-clock-rotate-left"></i> Auto-Sync Otomatis (setiap 15 menit)
+            </label>
+            <p id="autoSyncStatus" class="text-xs text-gray-500 mt-1 ml-6"></p>
+          </div>
+        </div>
+        
         <details class="mt-4">
           <summary class="cursor-pointer text-sm font-semibold" style="color:var(--primary)">
             <i class="fas fa-code mr-1"></i>Lihat Kode Google Apps Script untuk Deploy
           </summary>
           <div class="mt-3">
-            <p class="text-xs text-gray-500 mb-2">1. Buka Google Sheets &gt; Extensions &gt; Apps Script. 2. Paste kode berikut. 3. Deploy as Web App (Pilih "Anyone" di Who has access). 4. Copy URL Web App ke field di bawah.</p>
-            <pre class="bg-gray-900 text-gray-100 p-3 md:p-4 rounded-lg text-xs overflow-x-auto scrollbar-thin"><code>function doPost(e) {
-  try {
-    const ss = SpreadsheetApp.openById('${CONFIG.sheetId}');
-    const contents = e && e.postData ? e.postData.contents : '';
-    if (!contents) return ContentService.createTextOutput(JSON.stringify({status:'error', message:'No data'})).setMimeType(ContentService.MimeType.JSON);
-    
-    const data = JSON.parse(contents);
-    const sheet = ss.getSheetByName(data.sheet) || ss.insertSheet(data.sheet);
-    sheet.clear();
-    if (data.rows && data.rows.length > 0) {
-      const headers = Object.keys(data.rows[0]).filter(k => k !== '_id');
-      if (headers.length > 0) {
-        sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-        sheet.getRange(2, 1, data.rows.length, headers.length)
-          .setValues(data.rows.map(r => headers.map(h => r[h] || '')));
-      }
-    }
-    return ContentService.createTextOutput(JSON.stringify({status:'ok'}))
-      .setMimeType(ContentService.MimeType.JSON);
-  } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({status:'error', message: err.message}))
-      .setMimeType(ContentService.MimeType.JSON);
+            <p class="text-xs text-gray-500 mb-2">1. Buka Google Sheets &gt; Extensions &gt; Apps Script. 2. Paste kode berikut. 3. Deploy as Web App (Anyone). 4. Copy URL Web App ke field di bawah.</p>
+            <pre class="bg-gray-900 text-gray-100 p-4 rounded-lg text-xs overflow-x-auto scrollbar-thin"><code>function doPost(e) {
+  const ss = SpreadsheetApp.openById('${CONFIG.sheetId}');
+  const data = JSON.parse(e.postData.contents);
+  const sheet = ss.getSheetByName(data.sheet) || ss.insertSheet(data.sheet);
+  sheet.clear();
+  if (data.rows.length > 0) {
+    const headers = Object.keys(data.rows[0]).filter(k => k !== '_id');
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    sheet.getRange(2, 1, data.rows.length, headers.length)
+      .setValues(data.rows.map(r => headers.map(h => r[h] || '')));
   }
+  return ContentService.createTextOutput(JSON.stringify({status:'ok'}))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 function doGet(e) {
-  try {
-    const ss = SpreadsheetApp.openById('${CONFIG.sheetId}');
-    const sheetName = e && e.parameter ? e.parameter.sheet : '';
-    const sheet = ss.getSheetByName(sheetName);
-    if (!sheet) return ContentService.createTextOutput('[]').setMimeType(ContentService.MimeType.JSON);
-    
-    const data = sheet.getDataRange().getValues();
-    if (data.length === 0) return ContentService.createTextOutput('[]').setMimeType(ContentService.MimeType.JSON);
-    
-    const headers = data[0];
-    const rows = data.slice(1).map((r, i) => {
-      const obj = {_id: 'row_'+i};
-      headers.forEach((h, j) => obj[h] = r[j]);
-      return obj;
-    });
-    return ContentService.createTextOutput(JSON.stringify(rows))
-      .setMimeType(ContentService.MimeType.JSON);
-  } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({status:'error', message: err.message}))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
+  const ss = SpreadsheetApp.openById('${CONFIG.sheetId}');
+  const sheet = ss.getSheetByName(e.parameter.sheet);
+  if (!sheet) return ContentService.createTextOutput('[]');
+  const data = sheet.getDataRange().getValues();
+  const headers = data[0];
+  const rows = data.slice(1).map((r, i) => {
+    const obj = {_id: 'row_'+i};
+    headers.forEach((h, j) => obj[h] = r[j]);
+    return obj;
+  });
+  return ContentService.createTextOutput(JSON.stringify(rows))
+    .setMimeType(ContentService.MimeType.JSON);
 }</code></pre>
             <div class="mt-3">
               <label class="form-label">URL Web App (setelah deploy)</label>
@@ -1475,11 +1359,11 @@ function doGet(e) {
       </div>
       
       <!-- Backup & Restore -->
-      <div class="card settings-card p-4 md:p-6 mb-4 md:mb-6 card-padding">
-        <h3 class="font-serif text-lg md:text-xl font-bold mb-3 md:mb-4" style="color:var(--primary)">
+      <div class="card p-6 mb-6">
+        <h3 class="font-serif text-xl font-bold mb-4" style="color:var(--primary)">
           <i class="fas fa-database mr-2" style="color:var(--gold)"></i>Backup &amp; Restore Data
         </h3>
-        <div class="settings-grid grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <p class="text-sm text-gray-600 mb-3">Ekspor semua data ke file JSON untuk backup.</p>
             <button onclick="exportAllData()" class="btn-primary px-5 py-2 rounded-lg text-sm w-full">
@@ -1502,17 +1386,17 @@ function doGet(e) {
       </div>
       
       <!-- Info -->
-      <div class="card settings-card p-4 md:p-6 card-padding">
-        <h3 class="font-serif text-lg md:text-xl font-bold mb-3 md:mb-4" style="color:var(--primary)">
+      <div class="card p-6">
+        <h3 class="font-serif text-xl font-bold mb-4" style="color:var(--primary)">
           <i class="fas fa-circle-info mr-2" style="color:var(--gold)"></i>Informasi Aplikasi
         </h3>
         <div class="space-y-2 text-sm">
-          <div class="flex justify-between py-1 border-b gap-2" style="border-color:var(--border)"><span class="text-gray-500 flex-shrink-0">Nama Aplikasi</span><span class="font-semibold text-right">Sistem Administrasi Lingkungan St. Theofilus</span></div>
-          <div class="flex justify-between py-1 border-b gap-2" style="border-color:var(--border)"><span class="text-gray-500 flex-shrink-0">Lingkungan</span><span class="font-semibold text-right">${CONFIG.lingkungan}</span></div>
-          <div class="flex justify-between py-1 border-b gap-2" style="border-color:var(--border)"><span class="text-gray-500 flex-shrink-0">Paroki</span><span class="font-semibold text-right">${CONFIG.paroki}</span></div>
-          <div class="flex justify-between py-1 border-b gap-2" style="border-color:var(--border)"><span class="text-gray-500 flex-shrink-0">Keuskupan</span><span class="font-semibold text-right">${CONFIG.keuskupan}</span></div>
-          <div class="flex justify-between py-1 border-b gap-2" style="border-color:var(--border)"><span class="text-gray-500 flex-shrink-0">Ketua Lingkungan</span><span class="font-semibold text-right">${CONFIG.ketua}</span></div>
-          <div class="flex justify-between py-1 border-b gap-2" style="border-color:var(--border)"><span class="text-gray-500 flex-shrink-0">Pastor Paroki</span><span class="font-semibold text-right">${CONFIG.pastor}</span></div>
+          <div class="flex justify-between py-1 border-b" style="border-color:var(--border)"><span class="text-gray-500">Nama Aplikasi</span><span class="font-semibold">Sistem Administrasi Lingkungan St. Theofilus</span></div>
+          <div class="flex justify-between py-1 border-b" style="border-color:var(--border)"><span class="text-gray-500">Lingkungan</span><span class="font-semibold">${CONFIG.lingkungan}</span></div>
+          <div class="flex justify-between py-1 border-b" style="border-color:var(--border)"><span class="text-gray-500">Paroki</span><span class="font-semibold">${CONFIG.paroki}</span></div>
+          <div class="flex justify-between py-1 border-b" style="border-color:var(--border)"><span class="text-gray-500">Keuskupan</span><span class="font-semibold">${CONFIG.keuskupan}</span></div>
+          <div class="flex justify-between py-1 border-b" style="border-color:var(--border)"><span class="text-gray-500">Ketua Lingkungan</span><span class="font-semibold">${CONFIG.ketua}</span></div>
+          <div class="flex justify-between py-1 border-b" style="border-color:var(--border)"><span class="text-gray-500">Pastor Paroki</span><span class="font-semibold">${CONFIG.pastor}</span></div>
           <div class="flex justify-between py-1"><span class="text-gray-500">Total Bagian</span><span class="font-semibold">${Object.keys(ALL_SECTIONS).length} bagian</span></div>
         </div>
       </div>
@@ -1543,27 +1427,151 @@ async function syncToSheets() {
     if (section.isLetter) continue;
     const data = loadData(sectionId);
     try {
-      const response = await fetch(webAppUrl, {
+      await fetch(webAppUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'text/plain;charset=utf-8', // WAJIB text/plain untuk bypass CORS preflight di Apps Script
-        },
         body: JSON.stringify({ sheet: section.title, rows: data })
       });
-      const resText = await response.text();
-      console.log("Sync " + section.title + ":", resText);
-      if (response.ok) {
-        success++;
-      } else {
-        fail++;
-      }
+      success++;
     } catch (e) {
-      console.error("Error sync " + section.title + ":", e);
       fail++;
     }
   }
   
   showToast(`Sync selesai: ${success} berhasil, ${fail} gagal`, success > 0 ? 'success' : 'error');
+}
+
+// ============= PER-MENU SYNC (push satu menu ke Sheets / pull satu menu dari Sheets) =============
+async function syncSectionPush(sectionId) {
+  const webAppUrl = localStorage.getItem('webAppUrl');
+  if (!webAppUrl) {
+    showToast('Setel URL Web App terlebih dahulu di Pengaturan', 'error');
+    return;
+  }
+  const section = ALL_SECTIONS[sectionId];
+  if (!section) return;
+  const data = loadData(sectionId);
+  showToast(`Mengirim "${section.title}" ke Google Sheets...`, 'info');
+  try {
+    await fetch(webAppUrl, {
+      method: 'POST',
+      body: JSON.stringify({ sheet: section.title, rows: data })
+    });
+    showToast(`"${section.title}" berhasil dikirim ke Google Sheets`, 'success');
+  } catch (e) {
+    showToast(`Gagal mengirim "${section.title}" ke Google Sheets`, 'error');
+  }
+}
+
+async function syncSectionPull(sectionId) {
+  const webAppUrl = localStorage.getItem('webAppUrl');
+  if (!webAppUrl) {
+    showToast('Setel URL Web App terlebih dahulu di Pengaturan', 'error');
+    return;
+  }
+  const section = ALL_SECTIONS[sectionId];
+  if (!section) return;
+  showToast(`Mengambil "${section.title}" dari Google Sheets...`, 'info');
+  try {
+    const res = await fetch(webAppUrl + '?sheet=' + encodeURIComponent(section.title));
+    const rows = await res.json();
+    if (!Array.isArray(rows)) throw new Error('invalid response');
+    const normalized = rows.map(r => {
+      if (!r._id) r._id = generateId();
+      return r;
+    });
+    saveDataToStorage(sectionId, normalized);
+    showToast(`"${section.title}" berhasil diambil dari Google Sheets (${normalized.length} baris)`, 'success');
+    if (currentSection === sectionId) showSection(sectionId);
+  } catch (e) {
+    showToast(`Gagal mengambil "${section.title}" dari Google Sheets`, 'error');
+  }
+}
+
+// ============= CUSTOM LOGO (Pengaturan) =============
+function applyCustomLogo() {
+  const custom = localStorage.getItem('customLogoUrl');
+  if (!custom) return;
+  document.querySelectorAll('.app-logo-img').forEach(img => {
+    img.src = custom;
+    img.style.display = '';
+  });
+}
+
+function handleLogoUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) {
+    showToast('File harus berupa gambar', 'error');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    localStorage.setItem('customLogoUrl', e.target.result);
+    applyCustomLogo();
+    const preview = document.getElementById('logoPreview');
+    if (preview) preview.src = e.target.result;
+    showToast('Logo berhasil diperbarui', 'success');
+  };
+  reader.onerror = function() {
+    showToast('Gagal membaca file logo', 'error');
+  };
+  reader.readAsDataURL(file);
+}
+
+function resetLogo() {
+  localStorage.removeItem('customLogoUrl');
+  document.querySelectorAll('.app-logo-img').forEach(img => { img.src = CONFIG.logoUrl; });
+  const preview = document.getElementById('logoPreview');
+  if (preview) preview.src = CONFIG.logoUrl;
+  showToast('Logo dikembalikan ke default', 'success');
+}
+
+// ============= AUTO SYNC (setiap 15 menit) =============
+const AUTO_SYNC_INTERVAL_MS = 15 * 60 * 1000;
+let autoSyncTimer = null;
+
+async function runAutoSync() {
+  const webAppUrl = localStorage.getItem('webAppUrl');
+  if (!webAppUrl) return;
+  if (localStorage.getItem('autoSyncEnabled') === 'false') return;
+  let success = 0, fail = 0;
+  for (const sectionId of Object.keys(ALL_SECTIONS)) {
+    const section = ALL_SECTIONS[sectionId];
+    if (section.isLetter) continue;
+    const data = loadData(sectionId);
+    try {
+      await fetch(webAppUrl, {
+        method: 'POST',
+        body: JSON.stringify({ sheet: section.title, rows: data })
+      });
+      success++;
+    } catch (e) {
+      fail++;
+    }
+  }
+  localStorage.setItem('lastAutoSync', new Date().toISOString());
+  updateAutoSyncStatus();
+  showToast(`Auto-sync 15 menit: ${success} berhasil, ${fail} gagal`, fail === 0 ? 'success' : 'error');
+}
+
+function startAutoSync() {
+  if (autoSyncTimer) clearInterval(autoSyncTimer);
+  autoSyncTimer = setInterval(runAutoSync, AUTO_SYNC_INTERVAL_MS);
+}
+
+function toggleAutoSync(checkbox) {
+  localStorage.setItem('autoSyncEnabled', checkbox.checked ? 'true' : 'false');
+  showToast(checkbox.checked ? 'Auto-sync 15 menit diaktifkan' : 'Auto-sync 15 menit dimatikan', 'success');
+  updateAutoSyncStatus();
+}
+
+function updateAutoSyncStatus() {
+  const statusEl = document.getElementById('autoSyncStatus');
+  if (!statusEl) return;
+  const last = localStorage.getItem('lastAutoSync');
+  statusEl.textContent = last
+    ? 'Sync otomatis terakhir: ' + new Date(last).toLocaleString('id-ID')
+    : 'Sync otomatis belum pernah berjalan';
 }
 
 // ============= UTILITY FUNCTIONS =============
@@ -1602,7 +1610,7 @@ function showToast(message, type = 'success') {
     error: 'fa-exclamation-circle',
     info: 'fa-info-circle'
   };
-  toast.className = `toast ${colors[type]} text-white px-4 md:px-5 py-2 md:py-3 rounded-lg shadow-lg text-sm font-medium flex items-center gap-2`;
+  toast.className = `toast ${colors[type]} text-white px-5 py-3 rounded-lg shadow-lg text-sm font-medium flex items-center gap-2`;
   toast.innerHTML = `<i class="fas ${icons[type]}"></i>${message}`;
   container.appendChild(toast);
   setTimeout(() => toast.remove(), 3000);
@@ -1677,17 +1685,6 @@ function clearAllData() {
   showSection('dashboard');
 }
 
-// ============= MOBILE SIDEBAR FUNCTIONS =============
-function openSidebar() {
-  document.getElementById('sidebar').classList.add('open');
-  document.getElementById('sidebarOverlay').classList.add('show');
-}
-
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebarOverlay').classList.remove('show');
-}
-
 // Close modal on outside click
 document.getElementById('modal').addEventListener('click', (e) => {
   if (e.target.id === 'modal') closeModal();
@@ -1695,22 +1692,13 @@ document.getElementById('modal').addEventListener('click', (e) => {
 
 // Keyboard shortcut
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    closeModal();
-    closeSidebar();
-  }
-});
-
-// Close sidebar on resize to desktop
-window.addEventListener('resize', () => {
-  if (window.innerWidth > 768) {
-    closeSidebar();
-  }
+  if (e.key === 'Escape') closeModal();
 });
 
 // ============= INIT =============
 renderSidebar();
 showSection('dashboard');
+startAutoSync();
 </script>
 </body>
 </html>
