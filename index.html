@@ -1416,35 +1416,54 @@ function renderSettings(container) {
             <i class="fas fa-code mr-1"></i>Lihat Kode Google Apps Script untuk Deploy
           </summary>
           <div class="mt-3">
-            <p class="text-xs text-gray-500 mb-2">1. Buka Google Sheets &gt; Extensions &gt; Apps Script. 2. Paste kode berikut. 3. Deploy as Web App (Anyone). 4. Copy URL Web App ke field di bawah.</p>
+            <p class="text-xs text-gray-500 mb-2">1. Buka Google Sheets &gt; Extensions &gt; Apps Script. 2. Paste kode berikut. 3. Deploy as Web App (Pilih "Anyone" di Who has access). 4. Copy URL Web App ke field di bawah.</p>
             <pre class="bg-gray-900 text-gray-100 p-3 md:p-4 rounded-lg text-xs overflow-x-auto scrollbar-thin"><code>function doPost(e) {
-  const ss = SpreadsheetApp.openById('${CONFIG.sheetId}');
-  const data = JSON.parse(e.postData.contents);
-  const sheet = ss.getSheetByName(data.sheet) || ss.insertSheet(data.sheet);
-  sheet.clear();
-  if (data.rows.length > 0) {
-    const headers = Object.keys(data.rows[0]).filter(k => k !== '_id');
-    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-    sheet.getRange(2, 1, data.rows.length, headers.length)
-      .setValues(data.rows.map(r => headers.map(h => r[h] || '')));
+  try {
+    const ss = SpreadsheetApp.openById('${CONFIG.sheetId}');
+    const contents = e && e.postData ? e.postData.contents : '';
+    if (!contents) return ContentService.createTextOutput(JSON.stringify({status:'error', message:'No data'})).setMimeType(ContentService.MimeType.JSON);
+    
+    const data = JSON.parse(contents);
+    const sheet = ss.getSheetByName(data.sheet) || ss.insertSheet(data.sheet);
+    sheet.clear();
+    if (data.rows && data.rows.length > 0) {
+      const headers = Object.keys(data.rows[0]).filter(k => k !== '_id');
+      if (headers.length > 0) {
+        sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+        sheet.getRange(2, 1, data.rows.length, headers.length)
+          .setValues(data.rows.map(r => headers.map(h => r[h] || '')));
+      }
+    }
+    return ContentService.createTextOutput(JSON.stringify({status:'ok'}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({status:'error', message: err.message}))
+      .setMimeType(ContentService.MimeType.JSON);
   }
-  return ContentService.createTextOutput(JSON.stringify({status:'ok'}))
-    .setMimeType(ContentService.MimeType.JSON);
 }
 
 function doGet(e) {
-  const ss = SpreadsheetApp.openById('${CONFIG.sheetId}');
-  const sheet = ss.getSheetByName(e.parameter.sheet);
-  if (!sheet) return ContentService.createTextOutput('[]');
-  const data = sheet.getDataRange().getValues();
-  const headers = data[0];
-  const rows = data.slice(1).map((r, i) => {
-    const obj = {_id: 'row_'+i};
-    headers.forEach((h, j) => obj[h] = r[j]);
-    return obj;
-  });
-  return ContentService.createTextOutput(JSON.stringify(rows))
-    .setMimeType(ContentService.MimeType.JSON);
+  try {
+    const ss = SpreadsheetApp.openById('${CONFIG.sheetId}');
+    const sheetName = e && e.parameter ? e.parameter.sheet : '';
+    const sheet = ss.getSheetByName(sheetName);
+    if (!sheet) return ContentService.createTextOutput('[]').setMimeType(ContentService.MimeType.JSON);
+    
+    const data = sheet.getDataRange().getValues();
+    if (data.length === 0) return ContentService.createTextOutput('[]').setMimeType(ContentService.MimeType.JSON);
+    
+    const headers = data[0];
+    const rows = data.slice(1).map((r, i) => {
+      const obj = {_id: 'row_'+i};
+      headers.forEach((h, j) => obj[h] = r[j]);
+      return obj;
+    });
+    return ContentService.createTextOutput(JSON.stringify(rows))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({status:'error', message: err.message}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
 }</code></pre>
             <div class="mt-3">
               <label class="form-label">URL Web App (setelah deploy)</label>
@@ -1524,11 +1543,18 @@ async function syncToSheets() {
     if (section.isLetter) continue;
     const data = loadData(sectionId);
     try {
-      await fetch(webAppUrl, {
+      const response = await fetch(webAppUrl, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ sheet: section.title, rows: data })
       });
-      success++;
+      if (response.ok) {
+        success++;
+      } else {
+        fail++;
+      }
     } catch (e) {
       fail++;
     }
