@@ -181,8 +181,8 @@
   
   <div class="px-4 py-3 border-t" style="border-color:var(--border);background:var(--cream)">
     <div class="text-xs text-gray-500 mb-1">Google Sheets ID</div>
-    <div class="text-xs font-mono font-semibold break-all" style="color:var(--primary)">1bz-8jeYjaEFsVbT8Yf4bLjW3pR5ddW_VUdxG2viSi5k</div>
-    <button onclick="window.open('https://docs.google.com/spreadsheets/d/1bz-8jeYjaEFsVbT8Yf4bLjW3pR5ddW_VUdxG2viSi5k/edit','_blank')" class="mt-2 text-xs btn-outline px-3 py-1.5 rounded-md w-full">
+    <div class="text-xs font-mono font-semibold break-all" id="sidebarSheetId" style="color:var(--primary)">1bz-8jeYjaEFsVbT8Yf4bLjW3pR5ddW_VUdxG2viSi5k</div>
+    <button onclick="window.open('https://docs.google.com/spreadsheets/d/'+getSheetId()+'/edit','_blank')" class="mt-2 text-xs btn-outline px-3 py-1.5 rounded-md w-full">
       <i class="fas fa-external-link-alt mr-1"></i>Buka Google Sheets
     </button>
   </div>
@@ -1363,14 +1363,20 @@ function renderSettings(container) {
             <i class="fas fa-info-circle text-blue-600 text-lg mt-0.5"></i>
             <div class="text-sm text-blue-900">
               <p class="font-semibold mb-1">Informasi Google Sheets</p>
-              <p>Google Sheet ID: <code class="bg-white px-2 py-0.5 rounded text-xs">${CONFIG.sheetId}</code></p>
+              <p>Google Sheet ID: <code class="bg-white px-2 py-0.5 rounded text-xs">${getSheetId()}</code></p>
               <p class="mt-1">Data tersimpan secara lokal di browser (localStorage). Untuk sinkronisasi otomatis dengan Google Sheets, deploy Google Apps Script di bawah ini sebagai Web App.</p>
             </div>
           </div>
         </div>
         
+        <div class="mb-4">
+          <label class="form-label">Google Sheet ID</label>
+          <input type="text" id="sheetIdInput" placeholder="Masukkan Google Sheet ID" class="form-input" value="${getSheetId()}">
+          <button onclick="saveSheetId()" class="btn-outline px-4 py-2 rounded-lg text-sm mt-2">Simpan Sheet ID</button>
+        </div>
+        
         <div class="flex gap-3 mb-4">
-          <button onclick="window.open('https://docs.google.com/spreadsheets/d/${CONFIG.sheetId}/edit','_blank')" class="btn-primary px-4 py-2 rounded-lg text-sm">
+          <button onclick="window.open('https://docs.google.com/spreadsheets/d/${getSheetId()}/edit','_blank')" class="btn-primary px-4 py-2 rounded-lg text-sm">
             <i class="fas fa-external-link-alt mr-1.5"></i>Buka Google Sheets
           </button>
           <button onclick="syncToSheets()" class="btn-gold px-4 py-2 rounded-lg text-sm">
@@ -1395,7 +1401,7 @@ function renderSettings(container) {
           <div class="mt-3">
             <p class="text-xs text-gray-500 mb-2">1. Buka Google Sheets &gt; Extensions &gt; Apps Script. 2. Paste kode berikut. 3. Deploy as Web App (Anyone). 4. Copy URL Web App ke field di bawah.</p>
             <pre class="bg-gray-900 text-gray-100 p-4 rounded-lg text-xs overflow-x-auto scrollbar-thin"><code>function doPost(e) {
-  const ss = SpreadsheetApp.openById('${CONFIG.sheetId}');
+  const ss = SpreadsheetApp.openById('${getSheetId()}');
   const data = JSON.parse(e.postData.contents);
   const sheet = ss.getSheetByName(data.sheet) || ss.insertSheet(data.sheet);
   sheet.clear();
@@ -1410,7 +1416,7 @@ function renderSettings(container) {
 }
 
 function doGet(e) {
-  const ss = SpreadsheetApp.openById('${CONFIG.sheetId}');
+  const ss = SpreadsheetApp.openById('${getSheetId()}');
   const sheet = ss.getSheetByName(e.parameter.sheet);
   if (!sheet) return ContentService.createTextOutput('[]');
   const data = sheet.getDataRange().getValues();
@@ -1425,7 +1431,7 @@ function doGet(e) {
 }</code></pre>
             <div class="mt-3">
               <label class="form-label">URL Web App (setelah deploy)</label>
-              <input type="text" id="webAppUrl" placeholder="https://script.google.com/macros/s/.../exec" class="form-input" value="${localStorage.getItem('webAppUrl')||''}">
+              <input type="text" id="webAppUrl" placeholder="https://script.google.com/macros/s/.../exec" class="form-input" value="${getWebAppUrl()}">
               <button onclick="saveWebAppUrl()" class="btn-outline px-4 py-2 rounded-lg text-sm mt-2">Simpan URL</button>
             </div>
           </div>
@@ -1480,6 +1486,30 @@ function doGet(e) {
 }
 
 // ============= SYNC FUNCTIONS =============
+const DEFAULT_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzyVtqVizR_s0q20YGXIxCAKxhwfSRxPPNR__2D9Xf1lf56DNBzTO3i7ix9nOcojqmOoA/exec';
+
+function getWebAppUrl() {
+  const saved = localStorage.getItem('webAppUrl');
+  return (saved !== null && saved !== '') ? saved : DEFAULT_WEBAPP_URL;
+}
+
+function getSheetId() {
+  const saved = localStorage.getItem('sheetId');
+  return (saved !== null && saved !== '') ? saved : CONFIG.sheetId;
+}
+
+function saveSheetId() {
+  const id = document.getElementById('sheetIdInput').value.trim();
+  localStorage.setItem('sheetId', id);
+  refreshSidebarSheetInfo();
+  showToast('Google Sheet ID disimpan', 'success');
+}
+
+function refreshSidebarSheetInfo() {
+  const el = document.getElementById('sidebarSheetId');
+  if (el) el.textContent = getSheetId();
+}
+
 function saveWebAppUrl() {
   const url = document.getElementById('webAppUrl').value.trim();
   localStorage.setItem('webAppUrl', url);
@@ -1487,7 +1517,7 @@ function saveWebAppUrl() {
 }
 
 async function syncToSheets() {
-  const webAppUrl = localStorage.getItem('webAppUrl');
+  const webAppUrl = getWebAppUrl();
   if (!webAppUrl) {
     showToast('Setel URL Web App terlebih dahulu di Pengaturan', 'error');
     return;
@@ -1516,7 +1546,7 @@ async function syncToSheets() {
 
 // ============= PER-MENU SYNC (push satu menu ke Sheets / pull satu menu dari Sheets) =============
 async function syncSectionPush(sectionId) {
-  const webAppUrl = localStorage.getItem('webAppUrl');
+  const webAppUrl = getWebAppUrl();
   if (!webAppUrl) {
     showToast('Setel URL Web App terlebih dahulu di Pengaturan', 'error');
     return;
@@ -1537,7 +1567,7 @@ async function syncSectionPush(sectionId) {
 }
 
 async function syncSectionPull(sectionId) {
-  const webAppUrl = localStorage.getItem('webAppUrl');
+  const webAppUrl = getWebAppUrl();
   if (!webAppUrl) {
     showToast('Setel URL Web App terlebih dahulu di Pengaturan', 'error');
     return;
@@ -1605,7 +1635,7 @@ const AUTO_SYNC_INTERVAL_MS = 15 * 60 * 1000;
 let autoSyncTimer = null;
 
 async function runAutoSync() {
-  const webAppUrl = localStorage.getItem('webAppUrl');
+  const webAppUrl = getWebAppUrl();
   if (!webAppUrl) return;
   if (localStorage.getItem('autoSyncEnabled') === 'false') return;
   let success = 0, fail = 0;
@@ -1773,6 +1803,7 @@ document.addEventListener('keydown', (e) => {
 renderSidebar();
 showSection('dashboard');
 startAutoSync();
+refreshSidebarSheetInfo();
 </script>
 </body>
 </html>
