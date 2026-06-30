@@ -102,24 +102,77 @@
   .letter-preview{font-family:'Times New Roman',serif;line-height:1.8;font-size:13px}
   
   .icon-wrap{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+  /* ===== RESPONSIVE MOBILE/TABLET MENU (no side-slide, simple fade+scale open) ===== */
+  .mobile-menu-btn{display:none}
+  .mobile-menu-backdrop{display:none}
+  @media (max-width:1024px){
+    .mobile-menu-btn{display:flex}
+    aside.app-sidebar{
+      position:fixed;
+      top:0;left:0;right:0;bottom:0;
+      width:100%;
+      max-width:340px;
+      z-index:70;
+      opacity:0;
+      transform:scale(0.96);
+      pointer-events:none;
+      transition:opacity .2s ease,transform .2s ease;
+      box-shadow:0 10px 40px rgba(0,0,0,0.25);
+    }
+    aside.app-sidebar.mobile-open{
+      opacity:1;
+      transform:scale(1);
+      pointer-events:auto;
+    }
+    .mobile-menu-backdrop{
+      display:block;
+      position:fixed;inset:0;
+      background:rgba(15,23,42,0.45);
+      z-index:65;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .2s ease;
+    }
+    .mobile-menu-backdrop.active{
+      opacity:1;
+      pointer-events:auto;
+    }
+    header.app-header{padding-left:14px;padding-right:14px;flex-wrap:wrap;gap:10px}
+    #mainContent{padding-bottom:24px}
+    .card{border-radius:10px}
+  }
+  @media (max-width:640px){
+    header.app-header h2{font-size:18px}
+    .btn-outline,.btn-primary,.btn-gold{padding-top:8px;padding-bottom:8px;font-size:13px}
+    table.data-table thead th,table.data-table tbody td{padding:8px 10px;font-size:12.5px}
+  }
 </style>
 </head>
 <body class="flex h-screen overflow-hidden">
 
+<!-- MOBILE MENU BACKDROP -->
+<div class="mobile-menu-backdrop" id="mobileMenuBackdrop" onclick="closeMobileMenu()"></div>
+
 <!-- SIDEBAR -->
-<aside class="no-print w-72 bg-white border-r flex flex-col" style="border-color:var(--border)">
+<aside class="no-print app-sidebar w-72 bg-white border-r flex flex-col" style="border-color:var(--border)">
   <div class="px-5 py-5 border-b" style="border-color:var(--border);background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
-    <div class="flex items-center gap-3">
-      <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center p-1 flex-shrink-0 shadow-md ring-2 ring-white/30 overflow-hidden">
-        <img src="https://z-cdn.media.chatglm.cn/files/9f93308d-152e-4da7-b704-e5fec50b47d5.png" alt="Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" class="w-full h-full object-contain app-logo-img">
-        <div class="hidden w-full h-full items-center justify-center" style="display:none">
-          <i class="fas fa-church text-2xl" style="color:var(--primary)"></i>
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center p-0.5 flex-shrink-0 shadow-md ring-2 ring-white/30 overflow-hidden">
+          <img src="https://www.image2url.com/r2/default/images/1782809024713-b0cddecd-84e9-444f-b9c8-55fdb87650fb.png" alt="Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" class="w-full h-full object-contain app-logo-img">
+          <div class="hidden w-full h-full items-center justify-center" style="display:none">
+            <i class="fas fa-church text-2xl" style="color:var(--primary)"></i>
+          </div>
+        </div>
+        <div class="text-white min-w-0">
+          <h1 class="font-serif text-lg font-bold leading-tight">St. Theofilus</h1>
+          <p class="text-xs opacity-80 leading-tight">Taman Sari 8/9</p>
         </div>
       </div>
-      <div class="text-white min-w-0">
-        <h1 class="font-serif text-lg font-bold leading-tight">St. Theofilus</h1>
-        <p class="text-xs opacity-80 leading-tight">Taman Sari 8/9</p>
-      </div>
+      <button class="mobile-menu-btn text-white/80 hover:text-white text-xl flex-shrink-0" id="mobileMenuCloseBtn" onclick="closeMobileMenu()">
+        <i class="fas fa-xmark"></i>
+      </button>
     </div>
     <p class="text-xs text-white/60 mt-3 leading-relaxed">Sistem Administrasi<br>Lingkungan Gereja Katolik</p>
   </div>
@@ -138,10 +191,15 @@
 <!-- MAIN -->
 <main class="flex-1 flex flex-col overflow-hidden">
   <!-- HEADER -->
-  <header class="no-print bg-white border-b px-6 py-3 flex items-center justify-between" style="border-color:var(--border)">
-    <div>
-      <h2 id="pageTitle" class="font-serif text-2xl font-bold" style="color:var(--primary)">Dashboard</h2>
-      <p id="pageSubtitle" class="text-xs text-gray-500">Lingkungan Taman Sari 8/9 St. Theofilus</p>
+  <header class="no-print app-header bg-white border-b px-6 py-3 flex items-center justify-between" style="border-color:var(--border)">
+    <div class="flex items-center gap-3 min-w-0">
+      <button class="mobile-menu-btn items-center justify-center w-10 h-10 rounded-lg flex-shrink-0" style="background:var(--accent-blue-light);color:var(--primary)" id="mobileMenuOpenBtn" onclick="openMobileMenu()">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="min-w-0">
+        <h2 id="pageTitle" class="font-serif text-2xl font-bold truncate" style="color:var(--primary)">Dashboard</h2>
+        <p id="pageSubtitle" class="text-xs text-gray-500 truncate">Lingkungan Taman Sari 8/9 St. Theofilus</p>
+      </div>
     </div>
     <div class="flex items-center gap-3">
       <button onclick="exportAllData()" class="btn-outline px-4 py-2 rounded-lg text-sm font-medium">
@@ -199,7 +257,7 @@ const CONFIG = {
   email: "parokimanggabesar@gmail.com",
   ketua: "Sesilia Sylvia Winarto",
   pastor: "B. Christian Triyudo Prastowo, SJ",
-  logoUrl: "https://z-cdn.media.chatglm.cn/files/9f93308d-152e-4da7-b704-e5fec50b47d5.png",
+  logoUrl: "https://www.image2url.com/r2/default/images/1782809024713-b0cddecd-84e9-444f-b9c8-55fdb87650fb.png",
   sheetId: "1bz-8jeYjaEFsVbT8Yf4bLjW3pR5ddW_VUdxG2viSi5k"
 };
 
@@ -562,7 +620,23 @@ function renderSidebar() {
 }
 
 // ============= SHOW SECTION =============
+// ============= MOBILE MENU (buka/tutup tanpa slide samping) =============
+function openMobileMenu() {
+  const aside = document.querySelector('aside.app-sidebar');
+  const backdrop = document.getElementById('mobileMenuBackdrop');
+  if (aside) aside.classList.add('mobile-open');
+  if (backdrop) backdrop.classList.add('active');
+}
+
+function closeMobileMenu() {
+  const aside = document.querySelector('aside.app-sidebar');
+  const backdrop = document.getElementById('mobileMenuBackdrop');
+  if (aside) aside.classList.remove('mobile-open');
+  if (backdrop) backdrop.classList.remove('active');
+}
+
 function showSection(sectionId) {
+  closeMobileMenu();
   currentSection = sectionId;
   
   // Update active sidebar
@@ -630,7 +704,7 @@ function renderDashboard(container) {
             </div>
           </div>
           <div class="hidden md:block">
-            <div class="w-24 h-24 rounded-full bg-white flex items-center justify-center p-2.5 shadow-lg ring-2 ring-white/40 overflow-hidden">
+            <div class="w-24 h-24 rounded-full bg-white flex items-center justify-center p-2 shadow-lg ring-2 ring-white/40 overflow-hidden">
               <img src="${CONFIG.logoUrl}" alt="Logo" onerror="this.style.display='none'" class="w-full h-full object-contain app-logo-img">
             </div>
           </div>
